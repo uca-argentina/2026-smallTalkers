@@ -18,6 +18,7 @@ Dice class >> default [
 
 { #category : 'initialization' }
 Dice class >> withFaces: anInteger [
+	anInteger < 3 ifTrue: [ Error signal: 'A dice cannot have less than 3 faces' ].
 	^ self new initializeWith: anInteger 
 ]
 

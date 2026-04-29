@@ -26,7 +26,7 @@ self assert: (resultado between: 1 and: 6 )
 ]
 
 { #category : 'tests' }
-DiceTest >> test003 [
+DiceTest >> test003ADiceCannotBeInitializedIfItHasLessThan3Faces [
 
 | aDice |
 self should:[aDice:= Dice withFaces: 1] raise: Error  withExceptionDo: [:error | self assert: error messageText equals:'A dice cannot have less than 3 faces']
