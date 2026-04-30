@@ -34,3 +34,9 @@ Game >> initializeWith: anInteger and: anInteger2 [
 	position := anInteger.
 	totalOfTiles := anInteger2 
 ]
+
+{ #category : 'as yet unclassified' }
+Game >> moveForward: anInteger [
+self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over'].
+	position := position + anInteger.
+]
