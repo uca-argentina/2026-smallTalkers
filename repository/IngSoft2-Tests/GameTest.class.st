@@ -28,44 +28,45 @@ self should: [ aGame:= Game withTiles: 0 ]  raise: Error  withExceptionDo: [ :er
 { #category : 'tests' }
 GameTest >> test004ifAPlayerReachesFinalPositionTheGameEnds [
 
-| aGame |
-aGame := Game withTiles: 1.
-aGame moveShip: 1 forward: 1.
+	| aGame |
+	aGame := Game withTiles: 1.
+	aGame moveShip: 1 forward: 1.
 
-self assert: ( aGame hasEnded )
-
-
+	self assert: aGame hasEnded
 ]
 
 { #category : 'tests' }
 GameTest >> test005aPlayerCannotMoveIfTheGameIsAlreadyOver [
 
-| aGame |
-aGame := Game withTiles: 1.
-aGame moveShip: 1 forward: 1.
+	| aGame |
+	aGame := Game withTiles: 1.
+	aGame moveShip: 1 forward: 1.
 
-self should: [ aGame moveShip: 1 forward: 1 ]  raise: Error  withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ]
-
+	self
+		should: [ aGame moveShip: 1 forward: 1 ]
+		raise: Error
+		withExceptionDo: [ :error |
+			self assert: error messageText equals: 'The Game Is Already Over' ]
 ]
 
 { #category : 'tests' }
 GameTest >> test006aPlayerCanMoveVariousTilesAtOnce [
 
-| aGame |
-aGame := Game withTiles: 10.
-aGame moveShip: 1 forward: 11.
+	| aGame |
+	aGame := Game withTiles: 10.
+	aGame moveShip: 1 forward: 11.
 
-self assert: (aGame hasEnded)
+	self assert: aGame hasEnded
 ]
 
 { #category : 'tests' }
 GameTest >> test007aPlayerCanKnowItsPosition [
 
-| aGame |
-aGame := Game withTiles: 10.
-aGame moveShip: 1 forward: 5.
+	| aGame |
+	aGame := Game withTiles: 10.
+	aGame moveShip: 1 forward: 5.
 
-self assert: (aGame positionOf: 1) equals: 5.
+	self assert: (aGame positionOf: 1) equals: 5
 ]
 
 { #category : 'tests' }
@@ -84,4 +85,57 @@ GameTest >> test009WhenTheGameIsNotOverThereIsNoWinner [
 	aGame := Game withTiles: 10.
 	aGame moveShip: 1 forward: 3.
 	self assert: aGame winner isNil.
+]
+
+{ #category : 'tests' }
+GameTest >> test010WhenAShipWinsWithMultipleShipsTheGameEnds [
+
+	| aGame |
+	aGame := Game withTiles: 10 ships: 2.
+	aGame moveShip: 1 forward: 10.
+	self assert: aGame hasEnded.
+]
+
+{ #category : 'tests' }
+GameTest >> test011TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
+
+	| aGame |
+	aGame := Game withTiles: 10 ships: 2.
+	aGame moveShip: 2 forward: 10.
+	self assert: aGame winner equals: 2.
+]
+
+{ #category : 'tests' }
+GameTest >> test012AShipCannotMoveAfterAnotherShipWon [
+
+	| aGame |
+	aGame := Game withTiles: 10 ships: 2.
+	aGame moveShip: 1 forward: 10.
+	self
+		should: [ aGame moveShip: 2 forward: 5 ]
+		raise: Error
+		withExceptionDo: [ :e |
+		self assert: e messageText equals: 'The Game Is Already Over' ].
+]
+
+{ #category : 'tests' }
+GameTest >> test013CanKnowThePositionOfEachShipWithMultipleShips [
+
+	| aGame |
+	aGame := Game withTiles: 10 ships: 2.
+	aGame moveShip: 1 forward: 3.
+	aGame moveShip: 2 forward: 7.
+	self assert: (aGame positionOf: 1) equals: 3.
+	self assert: (aGame positionOf: 2) equals: 7.
+]
+
+{ #category : 'tests' }
+GameTest >> test014CannotCreateAGameWithZeroShips [
+
+	| aGame |
+	self
+		should: [ aGame := Game withTiles: 10 ships: 0 ]
+		raise: Error
+		withExceptionDo: [ :e |
+			self assert: e messageText equals: 'The Ship Count Cannot Be 0' ]
 ]
