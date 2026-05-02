@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'position',
-		'totalOfTiles'
+		'totalOfTiles',
+		'winner'
 	],
 	#classInstVars : [
 		'totalOfTiles',
@@ -32,11 +33,24 @@ Game >> hasEnded [
 { #category : 'testing' }
 Game >> initializeWith: anInteger and: anInteger2 [
 	position := anInteger.
-	totalOfTiles := anInteger2 
+	totalOfTiles := anInteger2.
+	winner := nil.
 ]
 
 { #category : 'as yet unclassified' }
-Game >> moveForward: anInteger [
-self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over'].
+Game >> moveShip: aShipIndex forward: anInteger [
+
+	self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
 	position := position + anInteger.
+	position >= totalOfTiles ifTrue: [ winner := aShipIndex ].
+]
+
+{ #category : 'as yet unclassified' }
+Game >> positionOf: aShipIndex [ 
+	^ position.
+]
+
+{ #category : 'as yet unclassified' }
+Game >> winner [
+	^ winner.
 ]
