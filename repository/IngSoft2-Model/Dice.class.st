@@ -2,7 +2,8 @@ Class {
 	#name : 'Dice',
 	#superclass : 'Object',
 	#instVars : [
-		'faces'
+		'faces',
+		'result'
 	],
 	#classInstVars : [
 		'faces'

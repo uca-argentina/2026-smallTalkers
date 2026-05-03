@@ -7,10 +7,6 @@ Class {
 		'positions',
 		'currentShip'
 	],
-	#classInstVars : [
-		'totalOfTiles',
-		'position'
-	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
@@ -21,18 +17,18 @@ Game class >> default [
 ]
 
 { #category : 'accessing' }
-Game class >> withTiles: anInteger [
-	anInteger = 0 ifTrue: [ Error signal: 'The Total Of Tiles Cannot Be 0'].
-	^ self new initializeWithTiles: anInteger ships: 1.
+Game class >> withTiles: aTotalOfTiles [
+	aTotalOfTiles = 0 ifTrue: [ Error signal: 'The Total Of Tiles Cannot Be 0'].
+	^ self new initializeWithTiles: aTotalOfTiles ships: 1.
 ]
 
 { #category : 'as yet unclassified' }
-Game class >> withTiles: anInteger ships: aShipCount [
+Game class >> withTiles: aTotalOfTiles ships: aShipCount [
 
-	anInteger <= 0 ifTrue: [
+	aTotalOfTiles <= 0 ifTrue: [
 		Error signal: 'The Total Of Tiles Cannot Be 0' ].
 	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
-	^ self new initializeWithTiles: anInteger ships: aShipCount
+	^ self new initializeWithTiles: aTotalOfTiles ships: aShipCount
 ]
 
 { #category : 'as yet unclassified' }
@@ -46,30 +42,12 @@ Game >> hasEnded [
 ]
 
 { #category : 'testing' }
-Game >> initializeWith: anInteger and: anInteger2 [
-	position := anInteger.
-	totalOfTiles := anInteger2.
-	winner := nil.
-]
+Game >> initializeWithTiles: aTotalOfTiles ships: aShipCount [
 
-{ #category : 'testing' }
-Game >> initializeWithTiles: anInteger ships: aShipCount [
-
-	totalOfTiles := anInteger.
+	totalOfTiles := aTotalOfTiles .
 	positions := Array new: aShipCount withAll: 0.
 	winner := nil.
 	currentShip := 1
-]
-
-{ #category : 'as yet unclassified' }
-Game >> moveShip: aShipIndex forward: anInteger [
-
-	| newPosition |
-	self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
-	newPosition := (positions at: currentShip ) + anInteger.
-	positions at: currentShip put: newPosition.
-	newPosition >= totalOfTiles ifTrue: [ winner := currentShip ].
-	self advanceTurn
 ]
 
 { #category : 'as yet unclassified' }
