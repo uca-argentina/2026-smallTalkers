@@ -7,9 +7,9 @@ Class {
 
 { #category : 'tests' }
 GameTest >> test001WhenThePositionIsLessThanTheTotalOfTilesTheGameIsNotOver [ 
-| aGame |
-aGame := Game default.
-self deny: (aGame hasEnded)
+	| aGame |
+	aGame := Game default.
+	self deny: (aGame hasEnded)
 ]
 
 { #category : 'tests' }
@@ -27,136 +27,156 @@ self should: [ aGame:= Game withTiles: 0 ]  raise: Error  withExceptionDo: [ :er
 
 { #category : 'tests' }
 GameTest >> test004ifAPlayerReachesFinalPositionTheGameEnds [
-
-	| aGame |
-	aGame := Game withTiles: 1.
-	aGame moveShipforward: 1.
-
-	self assert: aGame hasEnded
+    | aGame aDice |
+    aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 1).
+    aGame := Game withTiles: 1 ships: 1 dice: aDice.
+    aGame moveShip.
+    self assert: aGame hasEnded
 ]
 
 { #category : 'tests' }
 GameTest >> test005aPlayerCannotMoveIfTheGameIsAlreadyOver [
 
-	| aGame |
-	aGame := Game withTiles: 1.
-	aGame moveShipforward: 1.
-
-	self
-		should: [ aGame moveShipforward: 1 ]
-		raise: Error
-		withExceptionDo: [ :error |
-			self assert: error messageText equals: 'The Game Is Already Over' ]
+   | aGame aDice |
+   aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 1).
+   aGame := Game withTiles: 1 ships: 1 dice: aDice.
+   aGame moveShip.
+   self should: [ aGame moveShip ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ]
 ]
 
 { #category : 'tests' }
 GameTest >> test006aPlayerCanMoveVariousTilesAtOnce [
 
-	| aGame |
-	aGame := Game withTiles: 10.
-	aGame moveShipforward: 11.
-
-	self assert: aGame hasEnded
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 11 andValue: 11).
+   aGame := Game withTiles: 10 ships: 1 dice: aDice.
+   aGame moveShip.
+   self assert: aGame hasEnded
 ]
 
 { #category : 'tests' }
 GameTest >> test007aPlayerCanKnowItsPosition [
 
-	| aGame |
-	aGame := Game withTiles: 10.
-	aGame moveShipforward: 5.
-
-	self assert: (aGame positionOf: 1) equals: 5
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 5).
+   aGame := Game withTiles: 10 ships: 1 dice: aDice.
+   aGame moveShip.
+   self assert: (aGame positionOf: 1) equals: 5
 ]
 
 { #category : 'tests' }
 GameTest >> test008TheWinnerIsTheShipThatCrossedTheEnd [
 
-	| aGame |
-	aGame := Game withTiles: 10.
-	aGame moveShipforward: 10.
-	self assert: aGame winner equals: 1.
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
+   aGame := Game withTiles: 10 ships: 1 dice: aDice.
+   aGame moveShip.
+   self assert: aGame winner equals: 1.
 ]
 
 { #category : 'tests' }
 GameTest >> test009WhenTheGameIsNotOverThereIsNoWinner [
 
-	| aGame |
-	aGame := Game withTiles: 10.
-	aGame moveShipforward: 3.
-	self assert: aGame winner isNil.
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 3).
+   aGame := Game withTiles: 10 ships: 1 dice: aDice.
+   aGame moveShip.
+   self assert: aGame winner isNil.
 ]
 
 { #category : 'tests' }
 GameTest >> test010WhenAShipWinsWithMultipleShipsTheGameEnds [
 
-	| aGame |
-	aGame := Game withTiles: 10 ships: 2.
-	aGame moveShipforward: 10.
-	self assert: aGame hasEnded.
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
+   aGame := Game withTiles: 10 ships: 2 dice: aDice.
+   aGame moveShip.
+   self assert: aGame hasEnded.
 ]
 
 { #category : 'tests' }
 GameTest >> test011TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
 
-	| aGame |
-	aGame := Game withTiles: 10 ships: 2.
-	aGame moveShipforward: 9.
-	aGame moveShipforward: 10.
-	self assert: aGame winner equals: 2.
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 9).
+   aGame := Game withTiles: 10 ships: 2 dice: aDice.
+   aGame moveShip.
+   aGame moveShip.
+   aGame moveShip.
+   self assert: aGame winner equals: 1.
 ]
 
 { #category : 'tests' }
 GameTest >> test012AShipCannotMoveAfterAnotherShipWon [
 
-	| aGame |
-	aGame := Game withTiles: 10 ships: 2.
-	aGame moveShipforward: 10.
-	self
-		should: [ aGame moveShipforward: 5 ]
-		raise: Error
-		withExceptionDo: [ :e |
-		self assert: e messageText equals: 'The Game Is Already Over' ].
+    | aGame aDice |
+	 aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
+    aGame := Game withTiles: 10 ships: 2 dice: aDice.
+    aGame moveShip.
+    self should: [ aGame moveShip ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ].
 ]
 
 { #category : 'tests' }
 GameTest >> test013CanKnowThePositionOfEachShipWithMultipleShips [
 
-	| aGame |
-	aGame := Game withTiles: 10 ships: 2.
-	aGame moveShipforward: 3.
-	aGame moveShipforward: 7.
-	self assert: (aGame positionOf: 1) equals: 3.
-	self assert: (aGame positionOf: 2) equals: 7.
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 7 andValue: 3).
+   aGame := Game withTiles: 10 ships: 2 dice: aDice.
+   aGame moveShip.
+   aGame moveShip.
+   aGame moveShip.
+   self assert: (aGame positionOf: 1) equals: 6.
+   self assert: (aGame positionOf: 2) equals: 3.
 ]
 
 { #category : 'tests' }
 GameTest >> test014CannotCreateAGameWithZeroShips [
 
 	| aGame |
-	self
-		should: [ aGame := Game withTiles: 10 ships: 0 ]
-		raise: Error
-		withExceptionDo: [ :e |
-			self assert: e messageText equals: 'The Ship Count Cannot Be 0' ]
+	self should: [ aGame := Game withTiles: 10 ships: 0 ] raise: Error withExceptionDo: [ :error |self assert: error messageText equals: 'The Ship Count Cannot Be 0' ]
 ]
 
 { #category : 'tests' }
 GameTest >> test015TurnsRotateBetweenShips [
 
-	| aGame |
-	aGame:= Game withTiles: 10 ships: 2.
-	aGame moveShipforward: 3.
-	aGame moveShipforward: 5.
-	self assert: (aGame positionOf: 1) equals: 3.
-	self assert: (aGame positionOf: 2) equals: 5
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 3).
+   aGame := Game withTiles: 10 ships: 2 dice: aDice.
+   aGame moveShip.
+   aGame moveShip.
+   self assert: (aGame positionOf: 1) equals: 3.
+   self assert: (aGame positionOf: 2) equals: 3.
 ]
 
 { #category : 'tests' }
 GameTest >> test016TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 
-	| aGame |
-	aGame:= Game withTiles: 10 ships: 2.
-	aGame moveShipforward: 10.
-	self assert: aGame winner equals: 1.
+   | aGame aDice |
+	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
+   aGame := Game withTiles: 10 ships: 2 dice: aDice.
+   aGame moveShip.
+   self assert: aGame winner equals: 1.
+]
+
+{ #category : 'tests' }
+GameTest >> test017ShipMovesTheSumOfAllDiceRolls [
+
+	| aGame aDice aDice1 aDice2 |
+	aDice:= OrderedCollection new.
+	aDice1 := DiceHardcoded withFaces: 9 andValue: 9.
+	aDice2 := DiceHardcoded withFaces: 6 andValue: 6.
+	aDice add: aDice1.
+	aDice add: aDice2.
+	aGame := Game withTiles: 25 ships: 2  dice: aDice.
+	aGame moveShip.
+	self assert: (aGame positionOf: 1) equals: 15
+]
+
+{ #category : 'tests' }
+GameTest >> test018CannotCreateAGameWithEmptyDiceCollection [
+    | aGame |
+    self
+        should: [ aGame := Game withTiles: 10 ships: 1 dice: OrderedCollection new ]
+        raise: Error
+        withExceptionDo: [ :error |self assert: error messageText equals: 'The Dice Collection Cannot Be Empty' ]
 ]
