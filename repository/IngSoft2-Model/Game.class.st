@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'totalOfTiles',
 		'winner',
-		'positions'
+		'positions',
+		'currentShip'
 	],
 	#classInstVars : [
 		'totalOfTiles',
@@ -34,6 +35,11 @@ Game class >> withTiles: anInteger ships: aShipCount [
 	^ self new initializeWithTiles: anInteger ships: aShipCount
 ]
 
+{ #category : 'as yet unclassified' }
+Game >> advanceTurn [
+	currentShip := (currentShip rem:positions size) + 1
+]
+
 { #category : 'testing' }
 Game >> hasEnded [
  	^ winner notNil.
@@ -51,7 +57,8 @@ Game >> initializeWithTiles: anInteger ships: aShipCount [
 
 	totalOfTiles := anInteger.
 	positions := Array new: aShipCount withAll: 0.
-	winner := nil
+	winner := nil.
+	currentShip := 1
 ]
 
 { #category : 'as yet unclassified' }
@@ -59,9 +66,21 @@ Game >> moveShip: aShipIndex forward: anInteger [
 
 	| newPosition |
 	self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
-	newPosition := (positions at: aShipIndex) + anInteger.
-	positions at: aShipIndex put: newPosition.
-	newPosition >= totalOfTiles ifTrue: [ winner := aShipIndex ]
+	newPosition := (positions at: currentShip ) + anInteger.
+	positions at: currentShip put: newPosition.
+	newPosition >= totalOfTiles ifTrue: [ winner := currentShip ].
+	self advanceTurn
+]
+
+{ #category : 'as yet unclassified' }
+Game >> moveShipforward: anInteger [
+
+	| newPosition |
+	self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
+	newPosition := (positions at: currentShip ) + anInteger.
+	positions at: currentShip put: newPosition.
+	newPosition >= totalOfTiles ifTrue: [ winner := currentShip ].
+	self advanceTurn
 ]
 
 { #category : 'as yet unclassified' }

@@ -139,3 +139,23 @@ GameTest >> test014CannotCreateAGameWithZeroShips [
 		withExceptionDo: [ :e |
 			self assert: e messageText equals: 'The Ship Count Cannot Be 0' ]
 ]
+
+{ #category : 'tests' }
+GameTest >> test015TurnsRotateBetweenShips [
+
+	| aGame |
+	aGame:= Game withTiles: 10 ships: 2.
+	aGame moveShipforward: 3.
+	aGame moveShipforward: 5.
+	self assert: (aGame positionOf: 1) equals: 3.
+	self assert: (aGame positionOf: 2) equals: 5
+]
+
+{ #category : 'tests' }
+GameTest >> test016TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
+
+	| aGame |
+	aGame:= Game withTiles: 10 ships: 2.
+	aGame moveShipforward: 10.
+	self assert: aGame winner equals: 1.
+]
