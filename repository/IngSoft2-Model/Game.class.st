@@ -59,29 +59,32 @@ Game >> initializeWithBoard: aBoard  ships: aShipCount [
 
 { #category : 'testing' }
 Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
-
-	board := aBoard.
-	positions := Array new: aShipCount withAll: 0.
-	winner := nil.
-	currentShip := 1.
-	dice:= aDice.
+    board := aBoard.
+    positions := (1 to: aShipCount) collect: [ :i | Ship new ].
+    winner := nil.
+    currentShip := 1.
+    dice := aDice.
 ]
 
 { #category : 'as yet unclassified' }
 Game >> moveShip [
-
-    | newPosition roll |
+    | roll currentShipObject |
     self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
     roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
-    newPosition := (positions at: currentShip) + roll.
-    positions at: currentShip put: newPosition.
-	 (board isWinningPosition: newPosition) ifTrue: [ winner := currentShip ].
-    self advanceTurn
+    currentShipObject := positions at: currentShip.
+    currentShipObject moveForward: roll.
+    (board isWinningPosition: currentShipObject position) ifTrue: [ winner := currentShipObject ].
+    self advanceTurn.
 ]
 
 { #category : 'as yet unclassified' }
-Game >> positionOf: aShipIndex [ 
-	^ positions at: aShipIndex.
+Game >> positionOf: aShip [
+    ^ aShip position
+]
+
+{ #category : 'as yet unclassified' }
+Game >> ships [
+    ^ positions
 ]
 
 { #category : 'as yet unclassified' }

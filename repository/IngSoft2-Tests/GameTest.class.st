@@ -21,22 +21,7 @@ self deny: (aGame hasEnded)
 ]
 
 { #category : 'tests' }
-GameTest >> test002WhenThePositionIsLessThanTheConfigurableTotalOfTilesThenTheGame [ 
-| aGame aBoard |
-aBoard := Board withTiles: 9.
-aGame := Game withBoard: aBoard.
-self deny: (aGame hasEnded)
-]
-
-{ #category : 'tests' }
-GameTest >> test003IfTheTotalOfTilesIs0ThenTheGameIsNotInitialized [
-"| aGame |"
-"self should: [ aGame:= Game withTiles: 0 ]  raise: Error  withExceptionDo: [ :error | self assert: error messageText equals: 'The Total Of Tiles Cannot Be 0' ]"
-"This test was moved to BoardTest after Board refactor"
-]
-
-{ #category : 'tests' }
-GameTest >> test004ifAPlayerReachesFinalPositionTheGameEnds [
+GameTest >> test003ifAPlayerReachesFinalPositionTheGameEnds [
     | aGame aDice aBoard |
     aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 1).
 	 aBoard:= Board withTiles: 1.
@@ -46,7 +31,7 @@ GameTest >> test004ifAPlayerReachesFinalPositionTheGameEnds [
 ]
 
 { #category : 'tests' }
-GameTest >> test005aPlayerCannotMoveIfTheGameIsAlreadyOver [
+GameTest >> test004aPlayerCannotMoveIfTheGameIsAlreadyOver [
 
    | aGame aDice aBoard |
    aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 1).
@@ -57,18 +42,7 @@ GameTest >> test005aPlayerCannotMoveIfTheGameIsAlreadyOver [
 ]
 
 { #category : 'tests' }
-GameTest >> test006aPlayerCanMoveVariousTilesAtOnce [
-
-   | aGame aDice aBoard |
-	aDice := OrderedCollection with:(DiceHardcoded withFaces: 11 andValue: 11).
-	aBoard := Board withTiles: 10.
-   aGame := Game withBoard: aBoard ships: 1 dice: aDice.
-   aGame moveShip.
-   self assert: aGame hasEnded
-]
-
-{ #category : 'tests' }
-GameTest >> test006whenAPlayerExceedsFinalPositionThenTheGameEnds [
+GameTest >> test005whenAPlayerExceedsFinalPositionThenTheGameEnds [
 
    | aGame aDice aBoard |
 
@@ -81,29 +55,29 @@ GameTest >> test006whenAPlayerExceedsFinalPositionThenTheGameEnds [
 ]
 
 { #category : 'tests' }
-GameTest >> test007aPlayerCanKnowItsPosition [
+GameTest >> test006aPlayerCanKnowItsPosition [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 5).
 	aBoard := Board withTiles: 10.
    aGame := Game withBoard: aBoard ships: 1 dice: aDice.
    aGame moveShip.
-   self assert: (aGame positionOf: 1) equals: 5
+   self assert: (aGame positionOf: (aGame ships at: 1)) equals: 5.
 ]
 
 { #category : 'tests' }
-GameTest >> test008TheWinnerIsTheShipThatCrossedTheEnd [
+GameTest >> test007TheWinnerIsTheShipThatCrossedTheEnd [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
 	aBoard := Board withTiles: 10.
    aGame := Game withBoard: aBoard ships: 1 dice: aDice.
    aGame moveShip.
-   self assert: aGame winner equals: 1.
+   self assert: aGame winner equals: (aGame ships at: 1).
 ]
 
 { #category : 'tests' }
-GameTest >> test009WhenTheGameIsNotOverThereIsNoWinner [
+GameTest >> test008WhenTheGameIsNotOverThereIsNoWinner [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 3).
@@ -114,7 +88,7 @@ GameTest >> test009WhenTheGameIsNotOverThereIsNoWinner [
 ]
 
 { #category : 'tests' }
-GameTest >> test010WhenAShipWinsWithMultipleShipsTheGameEnds [
+GameTest >> test009WhenAShipWinsWithMultipleShipsTheGameEnds [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
@@ -125,7 +99,7 @@ GameTest >> test010WhenAShipWinsWithMultipleShipsTheGameEnds [
 ]
 
 { #category : 'tests' }
-GameTest >> test011TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
+GameTest >> test010TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 9).
@@ -134,11 +108,11 @@ GameTest >> test011TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
    aGame moveShip.
    aGame moveShip.
    aGame moveShip.
-   self assert: aGame winner equals: 1.
+   self assert: aGame winner equals: (aGame ships at: 1).
 ]
 
 { #category : 'tests' }
-GameTest >> test012AShipCannotMoveAfterAnotherShipWon [
+GameTest >> test011AShipCannotMoveAfterAnotherShipWon [
 
     | aGame aDice aBoard |
 	 aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
@@ -149,7 +123,7 @@ GameTest >> test012AShipCannotMoveAfterAnotherShipWon [
 ]
 
 { #category : 'tests' }
-GameTest >> test013CanKnowThePositionOfEachShipWithMultipleShips [
+GameTest >> test012CanKnowThePositionOfEachShipWithMultipleShips [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 7 andValue: 3).
@@ -158,22 +132,12 @@ GameTest >> test013CanKnowThePositionOfEachShipWithMultipleShips [
    aGame moveShip.
    aGame moveShip.
    aGame moveShip.
-   self assert: (aGame positionOf: 1) equals: 6.
-   self assert: (aGame positionOf: 2) equals: 3.
+   self assert: (aGame positionOf: (aGame ships at: 1)) equals: 6.
+   self assert: (aGame positionOf: (aGame ships at: 2)) equals: 3.
 ]
 
 { #category : 'tests' }
-GameTest >> test014CannotCreateAGameWithZeroShips [
-
-"	| aGame | "
- 	"self should: [ aGame := Game withTiles: 10 ships: 0 ] raise: Error withExceptionDo: [ :error |self assert: error messageText equals: 'The Ship Count Cannot Be 0' ]"
-	
-"This test was moved to BoardTest after Board refactor"
-
-]
-
-{ #category : 'tests' }
-GameTest >> test015TurnsRotateBetweenShips [
+GameTest >> test013TurnsRotateBetweenShips [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 3).
@@ -181,23 +145,23 @@ GameTest >> test015TurnsRotateBetweenShips [
    aGame := Game withBoard: aBoard ships: 2 dice: aDice.
    aGame moveShip.
    aGame moveShip.
-   self assert: (aGame positionOf: 1) equals: 3.
-   self assert: (aGame positionOf: 2) equals: 3.
+   self assert: (aGame positionOf: (aGame ships at: 1)) equals: 3.
+   self assert: (aGame positionOf: (aGame ships at: 2)) equals: 3.
 ]
 
 { #category : 'tests' }
-GameTest >> test016TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
+GameTest >> test014TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 
    | aGame aDice aBoard |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
 	aBoard:= Board withTiles: 10.
    aGame := Game withBoard: aBoard ships: 2 dice: aDice.
    aGame moveShip.
-   self assert: aGame winner equals: 1.
+   self assert: aGame winner equals: (aGame ships at: 1).
 ]
 
 { #category : 'tests' }
-GameTest >> test017ShipMovesTheSumOfAllDiceRolls [
+GameTest >> test015ShipMovesTheSumOfAllDiceRolls [
 
 	| aGame aDice aDice1 aDice2 aBoard |
 	aDice:= OrderedCollection new.
@@ -208,11 +172,11 @@ GameTest >> test017ShipMovesTheSumOfAllDiceRolls [
 	aBoard:= Board withTiles: 25.
    aGame := Game withBoard: aBoard ships: 2 dice: aDice.
 	aGame moveShip.
-	self assert: (aGame positionOf: 1) equals: 15
+	self assert: (aGame positionOf: (aGame ships at: 1)) equals: 15.
 ]
 
 { #category : 'tests' }
-GameTest >> test018CannotCreateAGameWithEmptyDiceCollection [
+GameTest >> test016CannotCreateAGameWithEmptyDiceCollection [
     | aGame aBoard |
 aBoard := Board withTiles: 10.
     self
