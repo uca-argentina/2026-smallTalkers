@@ -20,6 +20,7 @@ Ship >> initializeWith: anInteger [
 
 { #category : 'as yet unclassified' }
 Ship >> moveForward: anInteger [
+    anInteger <= 0 ifTrue: [ Error signal: 'Cannot move zero or negative squares' ].
     currentPosition := currentPosition + anInteger.
 ]
 

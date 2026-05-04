@@ -31,3 +31,31 @@ ShipTest >> test003AShipCanMoveForwardMultipleTimes [
 	aShip moveForward: 4.
 	self assert: aShip position equals: 7
 ]
+
+{ #category : 'tests' }
+ShipTest >> test004AShipCannotMoveForwardZeroSquares [
+
+	| aShip |
+	aShip := Ship new.
+	self
+		should: [ aShip moveForward: 0 ]
+		raise: Error
+		withExceptionDo: [ :e |
+			self
+				assert: e messageText
+				equals: 'Cannot move zero or negative squares' ]
+]
+
+{ #category : 'tests' }
+ShipTest >> test005AShipCannotMoveForwardNegativeSquares [
+
+	| aShip |
+	aShip := Ship new.
+	self
+		should: [ aShip moveForward: -1 ]
+		raise: Error
+		withExceptionDo: [ :e |
+			self
+				assert: e messageText
+				equals: 'Cannot move zero or negative squares' ]
+]
