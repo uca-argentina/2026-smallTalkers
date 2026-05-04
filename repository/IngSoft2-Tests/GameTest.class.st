@@ -62,7 +62,7 @@ GameTest >> test006aPlayerCanKnowItsPosition [
 	aBoard := Board withTiles: 10.
    aGame := Game withBoard: aBoard ships: 1 dice: aDice.
    aGame moveShip.
-   self assert: (aGame positionOf: 1) equals: 5
+   self assert: (aGame positionOf: (aGame ships at: 1)) equals: 5.
 ]
 
 { #category : 'tests' }
@@ -73,7 +73,7 @@ GameTest >> test007TheWinnerIsTheShipThatCrossedTheEnd [
 	aBoard := Board withTiles: 10.
    aGame := Game withBoard: aBoard ships: 1 dice: aDice.
    aGame moveShip.
-   self assert: aGame winner equals: 1.
+   self assert: aGame winner equals: (aGame ships at: 1).
 ]
 
 { #category : 'tests' }
@@ -108,7 +108,7 @@ GameTest >> test010TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
    aGame moveShip.
    aGame moveShip.
    aGame moveShip.
-   self assert: aGame winner equals: 1.
+   self assert: aGame winner equals: (aGame ships at: 1).
 ]
 
 { #category : 'tests' }
@@ -132,8 +132,8 @@ GameTest >> test012CanKnowThePositionOfEachShipWithMultipleShips [
    aGame moveShip.
    aGame moveShip.
    aGame moveShip.
-   self assert: (aGame positionOf: 1) equals: 6.
-   self assert: (aGame positionOf: 2) equals: 3.
+   self assert: (aGame positionOf: (aGame ships at: 1)) equals: 6.
+   self assert: (aGame positionOf: (aGame ships at: 2)) equals: 3.
 ]
 
 { #category : 'tests' }
@@ -145,8 +145,8 @@ GameTest >> test013TurnsRotateBetweenShips [
    aGame := Game withBoard: aBoard ships: 2 dice: aDice.
    aGame moveShip.
    aGame moveShip.
-   self assert: (aGame positionOf: 1) equals: 3.
-   self assert: (aGame positionOf: 2) equals: 3.
+   self assert: (aGame positionOf: (aGame ships at: 1)) equals: 3.
+   self assert: (aGame positionOf: (aGame ships at: 2)) equals: 3.
 ]
 
 { #category : 'tests' }
@@ -157,7 +157,7 @@ GameTest >> test014TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 	aBoard:= Board withTiles: 10.
    aGame := Game withBoard: aBoard ships: 2 dice: aDice.
    aGame moveShip.
-   self assert: aGame winner equals: 1.
+   self assert: aGame winner equals: (aGame ships at: 1).
 ]
 
 { #category : 'tests' }
@@ -172,7 +172,7 @@ GameTest >> test015ShipMovesTheSumOfAllDiceRolls [
 	aBoard:= Board withTiles: 25.
    aGame := Game withBoard: aBoard ships: 2 dice: aDice.
 	aGame moveShip.
-	self assert: (aGame positionOf: 1) equals: 15
+	self assert: (aGame positionOf: (aGame ships at: 1)) equals: 15.
 ]
 
 { #category : 'tests' }
