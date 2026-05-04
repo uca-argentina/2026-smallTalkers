@@ -6,7 +6,8 @@ Class {
 		'winner',
 		'positions',
 		'currentShip',
-		'dice'
+		'dice',
+		'board'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -14,32 +15,27 @@ Class {
 
 { #category : 'accessing' }
 Game class >> default [
-	^ self new initializeWithTiles: 10 ships: 1.
+	| aBoard |
+	aBoard := Board withTiles: 10.
+	^ self new initializeWithBoard: aBoard ships: 1.
 ]
 
 { #category : 'accessing' }
-Game class >> withTiles: aTotalOfTiles [
-	aTotalOfTiles = 0 ifTrue: [ Error signal: 'The Total Of Tiles Cannot Be 0'].
-	^ self new initializeWithTiles: aTotalOfTiles ships: 1.
+Game class >> withBoard: aBoard [
+	^ self new initializeWithBoard: aBoard ships: 1.
 ]
 
 { #category : 'as yet unclassified' }
-Game class >> withTiles: aTotalOfTiles ships: aShipCount [
-
-	aTotalOfTiles <= 0 ifTrue: [
-		Error signal: 'The Total Of Tiles Cannot Be 0' ].
-	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
-	^ self new initializeWithTiles: aTotalOfTiles ships: aShipCount
+Game class >> withBoard: aBoard ships: aShipCount [
+	^ self new initializeWithBoard: aBoard ships: aShipCount
 ]
 
 { #category : 'as yet unclassified' }
-Game class >> withTiles: aTotalOfTiles ships: aShipCount dice: aDice [
+Game class >> withBoard: aBoard ships: aShipCount dice: aDice [
 
-	aTotalOfTiles <= 0 ifTrue: [
-		Error signal: 'The Total Of Tiles Cannot Be 0' ].
 	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
 	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
-	^ self new initializeWithTiles: aTotalOfTiles ships: aShipCount dice: aDice
+	^ self new initializeWithBoard: aBoard ships: aShipCount dice: aDice
 ]
 
 { #category : 'as yet unclassified' }
@@ -53,18 +49,18 @@ Game >> hasEnded [
 ]
 
 { #category : 'testing' }
-Game >> initializeWithTiles: aTotalOfTiles ships: aShipCount [
+Game >> initializeWithBoard: aBoard  ships: aShipCount [
 
-	totalOfTiles := aTotalOfTiles .
+	board := aBoard .
 	positions := Array new: aShipCount withAll: 0.
 	winner := nil.
 	currentShip := 1
 ]
 
 { #category : 'testing' }
-Game >> initializeWithTiles: aTotalOfTiles ships: aShipCount dice: aDice [
+Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
 
-	totalOfTiles := aTotalOfTiles .
+	board := aBoard.
 	positions := Array new: aShipCount withAll: 0.
 	winner := nil.
 	currentShip := 1.
@@ -79,7 +75,7 @@ Game >> moveShip [
     roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
     newPosition := (positions at: currentShip) + roll.
     positions at: currentShip put: newPosition.
-    newPosition >= totalOfTiles ifTrue: [ winner := currentShip ].
+	 (board isWinningPosition: newPosition) ifTrue: [ winner := currentShip ].
     self advanceTurn
 ]
 
