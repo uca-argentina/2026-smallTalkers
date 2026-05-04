@@ -15,7 +15,9 @@ Class {
 
 { #category : 'accessing' }
 Game class >> default [
-	^ self new initializeWithTiles: 10 ships: 1.
+	| aBoard |
+	aBoard := Board withTiles: 10.
+	^ self new initializeWithBoard: aBoard ships: 1.
 ]
 
 { #category : 'accessing' }
@@ -34,31 +36,6 @@ Game class >> withBoard: aBoard ships: aShipCount dice: aDice [
 	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
 	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
 	^ self new initializeWithBoard: aBoard ships: aShipCount dice: aDice
-]
-
-{ #category : 'accessing' }
-Game class >> withTiles: aTotalOfTiles [
-	aTotalOfTiles = 0 ifTrue: [ Error signal: 'The Total Of Tiles Cannot Be 0'].
-	^ self new initializeWithTiles: aTotalOfTiles ships: 1.
-]
-
-{ #category : 'as yet unclassified' }
-Game class >> withTiles: aTotalOfTiles ships: aShipCount [
-
-	aTotalOfTiles <= 0 ifTrue: [
-		Error signal: 'The Total Of Tiles Cannot Be 0' ].
-	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
-	^ self new initializeWithTiles: aTotalOfTiles ships: aShipCount
-]
-
-{ #category : 'as yet unclassified' }
-Game class >> withTiles: aTotalOfTiles ships: aShipCount dice: aDice [
-
-	aTotalOfTiles <= 0 ifTrue: [
-		Error signal: 'The Total Of Tiles Cannot Be 0' ].
-	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
-	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
-	^ self new initializeWithTiles: aTotalOfTiles ships: aShipCount dice: aDice
 ]
 
 { #category : 'as yet unclassified' }
@@ -84,25 +61,6 @@ Game >> initializeWithBoard: aBoard  ships: aShipCount [
 Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
 
 	board := aBoard.
-	positions := Array new: aShipCount withAll: 0.
-	winner := nil.
-	currentShip := 1.
-	dice:= aDice.
-]
-
-{ #category : 'testing' }
-Game >> initializeWithTiles: aTotalOfTiles ships: aShipCount [
-
-	totalOfTiles := aTotalOfTiles .
-	positions := Array new: aShipCount withAll: 0.
-	winner := nil.
-	currentShip := 1
-]
-
-{ #category : 'testing' }
-Game >> initializeWithTiles: aTotalOfTiles ships: aShipCount dice: aDice [
-
-	totalOfTiles := aTotalOfTiles .
 	positions := Array new: aShipCount withAll: 0.
 	winner := nil.
 	currentShip := 1.

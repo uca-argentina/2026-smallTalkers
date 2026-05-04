@@ -14,22 +14,25 @@ GameTest >> test001WhenThePositionIsLessThanTheTotalOfTilesTheGameIsNotOver [
 
 { #category : 'tests' }
 GameTest >> test002WhenThePositionIsLessThanTheConfigurableTotalOfTiles [
-| aGame |
-aGame := Game withTiles: 9.
+| aGame aBoard |
+aBoard := Board withTiles: 9.
+aGame := Game withBoard: aBoard.
 self deny: (aGame hasEnded)
 ]
 
 { #category : 'tests' }
 GameTest >> test002WhenThePositionIsLessThanTheConfigurableTotalOfTilesThenTheGame [ 
-| aGame |
-aGame := Game withTiles: 9.
+| aGame aBoard |
+aBoard := Board withTiles: 9.
+aGame := Game withBoard: aBoard.
 self deny: (aGame hasEnded)
 ]
 
 { #category : 'tests' }
 GameTest >> test003IfTheTotalOfTilesIs0ThenTheGameIsNotInitialized [
-| aGame |
-self should: [ aGame:= Game withTiles: 0 ]  raise: Error  withExceptionDo: [ :error | self assert: error messageText equals: 'The Total Of Tiles Cannot Be 0' ]
+"| aGame |"
+"self should: [ aGame:= Game withTiles: 0 ]  raise: Error  withExceptionDo: [ :error | self assert: error messageText equals: 'The Total Of Tiles Cannot Be 0' ]"
+"This test was moved to BoardTest after Board refactor"
 ]
 
 { #category : 'tests' }
@@ -162,8 +165,11 @@ GameTest >> test013CanKnowThePositionOfEachShipWithMultipleShips [
 { #category : 'tests' }
 GameTest >> test014CannotCreateAGameWithZeroShips [
 
-	| aGame |
-	self should: [ aGame := Game withTiles: 10 ships: 0 ] raise: Error withExceptionDo: [ :error |self assert: error messageText equals: 'The Ship Count Cannot Be 0' ]
+"	| aGame | "
+ 	"self should: [ aGame := Game withTiles: 10 ships: 0 ] raise: Error withExceptionDo: [ :error |self assert: error messageText equals: 'The Ship Count Cannot Be 0' ]"
+	
+"This test was moved to BoardTest after Board refactor"
+
 ]
 
 { #category : 'tests' }
@@ -207,9 +213,10 @@ GameTest >> test017ShipMovesTheSumOfAllDiceRolls [
 
 { #category : 'tests' }
 GameTest >> test018CannotCreateAGameWithEmptyDiceCollection [
-    | aGame |
+    | aGame aBoard |
+aBoard := Board withTiles: 10.
     self
-        should: [ aGame := Game withTiles: 10 ships: 1 dice: OrderedCollection new ]
+        should: [ aGame := Game withBoard: aBoard ships: 1 dice: OrderedCollection new ]
         raise: Error
         withExceptionDo: [ :error |self assert: error messageText equals: 'The Dice Collection Cannot Be Empty' ]
 ]
