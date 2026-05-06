@@ -5,7 +5,9 @@ Class {
 		'totalOfTiles',
 		'winner',
 		'positions',
-		'currentShip'
+		'currentShip',
+		'dice',
+		'board'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -13,22 +15,27 @@ Class {
 
 { #category : 'accessing' }
 Game class >> default [
-	^ self new initializeWithTiles: 10 ships: 1.
+	| aBoard |
+	aBoard := Board withTiles: 10.
+	^ self new initializeWithBoard: aBoard ships: 1.
 ]
 
 { #category : 'accessing' }
-Game class >> withTiles: aTotalOfTiles [
-	aTotalOfTiles = 0 ifTrue: [ Error signal: 'The Total Of Tiles Cannot Be 0'].
-	^ self new initializeWithTiles: aTotalOfTiles ships: 1.
+Game class >> withBoard: aBoard [
+	^ self new initializeWithBoard: aBoard ships: 1.
 ]
 
 { #category : 'as yet unclassified' }
-Game class >> withTiles: aTotalOfTiles ships: aShipCount [
+Game class >> withBoard: aBoard ships: aShipCount [
+	^ self new initializeWithBoard: aBoard ships: aShipCount
+]
 
-	aTotalOfTiles <= 0 ifTrue: [
-		Error signal: 'The Total Of Tiles Cannot Be 0' ].
+{ #category : 'as yet unclassified' }
+Game class >> withBoard: aBoard ships: aShipCount dice: aDice [
+
 	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
-	^ self new initializeWithTiles: aTotalOfTiles ships: aShipCount
+	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
+	^ self new initializeWithBoard: aBoard ships: aShipCount dice: aDice
 ]
 
 { #category : 'as yet unclassified' }
@@ -38,32 +45,46 @@ Game >> advanceTurn [
 
 { #category : 'testing' }
 Game >> hasEnded [
- 	^ winner notNil.
+ 	^ winner isNull not.
 ]
 
 { #category : 'testing' }
-Game >> initializeWithTiles: aTotalOfTiles ships: aShipCount [
+Game >> initializeWithBoard: aBoard  ships: aShipCount [
 
-	totalOfTiles := aTotalOfTiles .
+	board := aBoard .
 	positions := Array new: aShipCount withAll: 0.
-	winner := nil.
+	winner := NullShip new.
 	currentShip := 1
 ]
 
-{ #category : 'as yet unclassified' }
-Game >> moveShipforward: anInteger [
-
-	| newPosition |
-	self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
-	newPosition := (positions at: currentShip ) + anInteger.
-	positions at: currentShip put: newPosition.
-	newPosition >= totalOfTiles ifTrue: [ winner := currentShip ].
-	self advanceTurn
+{ #category : 'testing' }
+Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
+    board := aBoard.
+    positions := (1 to: aShipCount) collect: [ :i | Ship new ].
+    winner := NullShip new.
+    currentShip := 1.
+    dice := aDice.
 ]
 
 { #category : 'as yet unclassified' }
-Game >> positionOf: aShipIndex [ 
-	^ positions at: aShipIndex.
+Game >> moveShip [
+    | roll currentShipObject |
+    self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
+    roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
+    currentShipObject := positions at: currentShip.
+    currentShipObject moveForward: roll.
+    (board isWinningPosition: currentShipObject position) ifTrue: [ winner := currentShipObject ].
+    self advanceTurn.
+]
+
+{ #category : 'as yet unclassified' }
+Game >> positionOf: aShip [
+    ^ aShip position
+]
+
+{ #category : 'as yet unclassified' }
+Game >> ships [
+    ^ positions
 ]
 
 { #category : 'as yet unclassified' }
