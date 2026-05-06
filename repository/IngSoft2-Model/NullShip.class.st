@@ -1,12 +1,11 @@
 Class {
-	#name : 'Dummy',
+	#name : 'NullShip',
 	#superclass : 'Object',
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'testing' }
-Dummy >> isDummy [
-
-	^ true
+{ #category : 'accessing' }
+NullShip >> isNull [
+	^ true.
 ]
