@@ -45,7 +45,7 @@ Game >> advanceTurn [
 
 { #category : 'testing' }
 Game >> hasEnded [
- 	^ winner notNil.
+ 	^ winner isNull not.
 ]
 
 { #category : 'testing' }
@@ -53,7 +53,7 @@ Game >> initializeWithBoard: aBoard  ships: aShipCount [
 
 	board := aBoard .
 	positions := Array new: aShipCount withAll: 0.
-	winner := nil.
+	winner := NullShip new.
 	currentShip := 1
 ]
 
@@ -61,7 +61,7 @@ Game >> initializeWithBoard: aBoard  ships: aShipCount [
 Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
     board := aBoard.
     positions := (1 to: aShipCount) collect: [ :i | Ship new ].
-    winner := nil.
+    winner := NullShip new.
     currentShip := 1.
     dice := aDice.
 ]

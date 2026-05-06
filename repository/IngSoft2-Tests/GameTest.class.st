@@ -84,7 +84,7 @@ GameTest >> test008WhenTheGameIsNotOverThereIsNoWinner [
 	aBoard:= Board withTiles: 10.
    aGame := Game withBoard: aBoard ships: 1 dice: aDice.
    aGame moveShip.
-   self assert: aGame winner isNil.
+   self assert: aGame winner isNull.
 ]
 
 { #category : 'tests' }
