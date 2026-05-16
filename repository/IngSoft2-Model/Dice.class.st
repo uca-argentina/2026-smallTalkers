@@ -2,20 +2,11 @@ Class {
 	#name : 'Dice',
 	#superclass : 'Object',
 	#instVars : [
-		'faces',
-		'result'
-	],
-	#classInstVars : [
 		'faces'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
-
-{ #category : 'initialization' }
-Dice class >> default [
-	^ self new initializeWith: 3
-]
 
 { #category : 'initialization' }
 Dice class >> withFaces: anInteger [

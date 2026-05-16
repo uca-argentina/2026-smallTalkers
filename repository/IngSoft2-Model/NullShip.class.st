@@ -9,3 +9,13 @@ Class {
 NullShip >> isNull [
 	^ true.
 ]
+
+{ #category : 'accessing' }
+NullShip >> moveForward: anInteger [
+	"Null Ship no se mueve"
+]
+
+{ #category : 'accessing' }
+NullShip >> position [
+	^ 0
+]

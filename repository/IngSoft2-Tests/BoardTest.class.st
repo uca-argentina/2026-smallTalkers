@@ -8,13 +8,13 @@ Class {
 { #category : 'tests' }
 BoardTest >> test001whenABoardWithZeroTilesIsCreatedThenThrowError [
 
-self should: [ Board withTiles: 0 ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'Can not create a board with zero tiles.' ]
+self should: [ Board withTiles: 0 ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'Cannot create a board with zero or negative tiles.']
 ]
 
 { #category : 'tests' }
 BoardTest >> test002whenABoardWithNegativeTilesIsCreatedThenThrowError [
 
-self should: [ Board withTiles: -1 ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'Can not create a board with negative tiles.' ]
+self should: [ Board withTiles: -1 ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'Cannot create a board with zero or negative tiles.' ]
 ]
 
 { #category : 'tests' }

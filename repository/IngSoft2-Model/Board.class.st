@@ -10,8 +10,7 @@ Class {
 
 { #category : 'accessing' }
 Board class >> withTiles: aTotalOfTiles [
-	aTotalOfTiles = 0 ifTrue: [ Error signal: 'Can not create a board with zero tiles.'].
-	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Can not create a board with negative tiles.'].
+	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative tiles.'].
 	^ self new initializeWithTiles: aTotalOfTiles.
 ]
 

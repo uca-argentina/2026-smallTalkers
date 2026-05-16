@@ -2,33 +2,16 @@ Class {
 	#name : 'Game',
 	#superclass : 'Object',
 	#instVars : [
-		'totalOfTiles',
 		'winner',
-		'positions',
+		'ships',
 		'currentShip',
 		'dice',
-		'board'
+		'board',
+		'hasEnded'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
-
-{ #category : 'accessing' }
-Game class >> default [
-	| aBoard |
-	aBoard := Board withTiles: 10.
-	^ self new initializeWithBoard: aBoard ships: 1.
-]
-
-{ #category : 'accessing' }
-Game class >> withBoard: aBoard [
-	^ self new initializeWithBoard: aBoard ships: 1.
-]
-
-{ #category : 'as yet unclassified' }
-Game class >> withBoard: aBoard ships: aShipCount [
-	^ self new initializeWithBoard: aBoard ships: aShipCount
-]
 
 { #category : 'as yet unclassified' }
 Game class >> withBoard: aBoard ships: aShipCount dice: aDice [
@@ -40,28 +23,20 @@ Game class >> withBoard: aBoard ships: aShipCount dice: aDice [
 
 { #category : 'as yet unclassified' }
 Game >> advanceTurn [
-	currentShip := (currentShip rem:positions size) + 1
+	currentShip := (currentShip rem: ships size) + 1
 ]
 
 { #category : 'testing' }
 Game >> hasEnded [
- 	^ winner isNull not.
-]
-
-{ #category : 'testing' }
-Game >> initializeWithBoard: aBoard  ships: aShipCount [
-
-	board := aBoard .
-	positions := Array new: aShipCount withAll: 0.
-	winner := NullShip new.
-	currentShip := 1
+ 	^ hasEnded 
 ]
 
 { #category : 'testing' }
 Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
     board := aBoard.
-    positions := (1 to: aShipCount) collect: [ :i | Ship new ].
+    ships := (1 to: aShipCount) collect: [ :i | Ship new ].
     winner := NullShip new.
+	 hasEnded := false.
     currentShip := 1.
     dice := aDice.
 ]
@@ -71,9 +46,9 @@ Game >> moveShip [
     | roll currentShipObject |
     self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
     roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
-    currentShipObject := positions at: currentShip.
+    currentShipObject := ships at: currentShip.
     currentShipObject moveForward: roll.
-    (board isWinningPosition: currentShipObject position) ifTrue: [ winner := currentShipObject ].
+    (board isWinningPosition: currentShipObject position) ifTrue: [ winner := currentShipObject. hasEnded := true ].
     self advanceTurn.
 ]
 
@@ -84,7 +59,7 @@ Game >> positionOf: aShip [
 
 { #category : 'as yet unclassified' }
 Game >> ships [
-    ^ positions
+    ^ ships
 ]
 
 { #category : 'as yet unclassified' }
