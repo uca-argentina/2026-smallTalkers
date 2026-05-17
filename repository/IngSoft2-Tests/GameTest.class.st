@@ -169,3 +169,18 @@ aBoard := Board withTiles: 10.
         raise: Error
         withExceptionDo: [ :error |self assert: error messageText equals: 'The Dice Collection Cannot Be Empty' ]
 ]
+
+{ #category : 'tests' }
+GameTest >> test015TheGameKnowsWhenItsOverWithLaps [
+
+	| aGame aDice aDice2 aBoard |
+	aDice:= OrderedCollection new.
+	aDice2 := DiceHardcoded withFaces: 10 andValue: 10.
+	aDice add: aDice2.
+	aBoard:= Board withTiles: 10 laps: 2.
+   aGame := Game withBoard: aBoard ships: 2 dice: aDice.
+	aGame moveShip.
+	aGame moveShip.
+	aGame moveShip.
+	self assert: aGame hasEnded 
+]

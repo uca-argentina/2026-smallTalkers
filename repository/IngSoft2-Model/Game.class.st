@@ -47,8 +47,11 @@ Game >> moveShip [
     self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
     roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
     currentShipObject := ships at: currentShip.
-    currentShipObject moveForward: roll.
-    (board isWinningPosition: currentShipObject position) ifTrue: [ winner := currentShipObject. hasEnded := true ].
+    currentShipObject moveForward: roll onBoard: board.           
+    (board isWinningPosition: currentShipObject laps ) ifTrue: [
+        winner := currentShipObject.
+        hasEnded := true
+    ].
     self advanceTurn.
 ]
 
