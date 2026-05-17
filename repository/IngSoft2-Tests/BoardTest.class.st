@@ -56,7 +56,7 @@ BoardTest >> test007ABoardKnowsWhenAPositionIsAWinningPosition [
 
 	| aBoard |
 	aBoard := Board withTiles: 10 laps: 1.
-	self assert: (aBoard isWinningPosition: 10 lap: 1)
+	self assert: (aBoard isWinningPosition: 1)
 ]
 
 { #category : 'tests' }
@@ -64,13 +64,5 @@ BoardTest >> test008ABoardKnowsWhenAPositionIsNotAWinningPosition [
 
 	| aBoard |
 	aBoard := Board withTiles: 10 laps: 2.
-	self deny: (aBoard isWinningPosition: 10 lap: 1)
-]
-
-{ #category : 'tests' }
-BoardTest >> test009ABoardKnowsWhenALapIsNotAWinningPosition [
-
-	| aBoard |
-	aBoard := Board withTiles: 10 laps: 2.
-	self deny: (aBoard isWinningPosition: 7 lap: 2)
+	self deny: (aBoard isWinningPosition: 1)
 ]
