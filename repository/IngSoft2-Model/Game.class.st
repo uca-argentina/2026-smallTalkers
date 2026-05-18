@@ -14,11 +14,11 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-Game class >> withBoard: aBoard ships: aShipCount dice: aDice [
+Game class >> withBoard: aBoard ships: aShipCollection dice: aDice [
 
-	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
+	aShipCollection size <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
 	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
-	^ self new initializeWithBoard: aBoard ships: aShipCount dice: aDice
+	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice
 ]
 
 { #category : 'as yet unclassified' }
@@ -32,9 +32,9 @@ Game >> hasEnded [
 ]
 
 { #category : 'testing' }
-Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
+Game >> initializeWithBoard: aBoard ships: aShipCollection dice: aDice [
     board := aBoard.
-    ships := (1 to: aShipCount) collect: [ :i | Ship new ].
+    ships := aShipCollection.
     winner := NullShip new.
 	 hasEnded := false.
     currentShip := 1.
