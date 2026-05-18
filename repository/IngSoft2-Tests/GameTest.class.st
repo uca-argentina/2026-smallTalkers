@@ -150,34 +150,35 @@ GameTest >> test010CanKnowThePositionOfEachShipWithMultipleShips [
 { #category : 'tests' }
 GameTest >> test011TurnsRotateBetweenShips [
 
-   | aGame aDice aBoard aShip aShip1 aShip2 |
-	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 3).
-	aBoard:= Board withTiles: 10.
+	| aGame aDice aBoard aShip aShip1 aShip2 |
+	aDice := OrderedCollection with:
+		         (DiceHardcoded withFaces: 6 andValue: 3).
+	aBoard := Board withTiles: 10.
 	aShip := OrderedCollection new.
 	aShip1 := Ship new.
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
-   aGame moveShip.
-   aGame moveShip.
-	self assert: (aGame ships at: 1) position equals: 3.
-	self assert: (aGame ships at: 2) position equals: 3.
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
+	aGame moveShip.
+	self assert: aGame ships first position equals: 3.
+	self assert: (aGame ships at: 2) position equals: 3
 ]
 
 { #category : 'tests' }
 GameTest >> test012TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 
-   | aGame aDice aBoard aShip aShip1 aShip2 |
-	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
-	aBoard:= Board withTiles: 10.
+	| aGame aDice aBoard aShip aShip1 aShip2 |
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 10).
+	aBoard := Board withTiles: 10.
 	aShip := OrderedCollection new.
 	aShip1 := Ship new.
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
-   aGame moveShip.
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
    self assert: aGame winner equals: (aGame ships at: 1).
 ]
 
@@ -185,18 +186,18 @@ GameTest >> test012TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 GameTest >> test013ShipMovesTheSumOfAllDiceRolls [
 
 	| aGame aDice aDice1 aDice2 aBoard aShip aShip1 aShip2 |
-	aDice:= OrderedCollection new.
+	aDice := OrderedCollection new.
 	aDice1 := DiceHardcoded withFaces: 9 andValue: 9.
 	aDice2 := DiceHardcoded withFaces: 6 andValue: 6.
 	aDice add: aDice1.
 	aDice add: aDice2.
-	aBoard:= Board withTiles: 25.
+	aBoard := Board withTiles: 25.
 	aShip := OrderedCollection new.
 	aShip1 := Ship new.
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
 	aGame moveShip.
 	self assert: (aGame ships at: 1) position equals: 15.
 ]
