@@ -41,6 +41,8 @@ Board >> effectAt: aPosition [
 Board >> initializeWithTiles: aTotalOfTiles [
 
 	totalOfTiles := aTotalOfTiles .
+	laps := 1.
+	effects:= OrderedCollection new.
 ]
 
 { #category : 'initialization' }
@@ -48,6 +50,7 @@ Board >> initializeWithTiles: aTotalOfTiles laps: aLapCount [
 
 	totalOfTiles := aTotalOfTiles .
 	laps := aLapCount.
+	effects := OrderedCollection new.
 ]
 
 { #category : 'initialization' }
