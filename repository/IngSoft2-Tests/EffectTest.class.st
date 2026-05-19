@@ -146,3 +146,113 @@ EffectTest >> test009MoonWalkCannotBeCreatedWithNegativeN [
         withExceptionDo: [ :error |
             self assert: error messageText equals: 'MoonWalk steps must be positive' ].
 ]
+
+{ #category : 'tests' }
+EffectTest >> test010HyperJumpUsesFirstValueOnFirstLanding [
+
+	| aBoard aShip aDice aGame anEffect |
+	anEffect := OrderedCollection new.
+	1 to: 10 do: [ :i | anEffect add: NullEffect new. ].
+	anEffect at: 4 put: (HyperJump withParsecs: #(5 2 1)).
+	aBoard := Board withTiles: 10 laps: 1 effect: anEffect.
+	aShip := OrderedCollection with: Ship new.
+	aDice := OrderedCollection with: ( DiceHardcoded withFaces: 3 andValue: 3 ).
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
+	
+self assert: (aGame ships at: 1) position equals: 8
+]
+
+{ #category : 'tests' }
+EffectTest >> test011HyperJumpUsesSecondParsecValueInSecondLanding [
+
+	| aBoard aShip aDice aGame anEffect aShip2 |
+	anEffect := OrderedCollection new.
+	1 to: 10 do: [ :i | anEffect add: NullEffect new. ].
+	anEffect at: 4 put: (HyperJump withParsecs: #(5 2 1 )).
+	aBoard := Board withTiles: 10 laps: 1 effect: anEffect.
+	aShip := OrderedCollection with: Ship new.
+	aShip2:= Ship new. 
+	aShip add: aShip2.
+	aDice := OrderedCollection with: ( DiceHardcoded withFaces: 3 andValue: 3 ).
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
+	aGame moveShip.
+self assert: (aGame ships at: 2) position equals: 5
+]
+
+{ #category : 'tests' }
+EffectTest >> test012HyperJumpCannotBeCreatedWithEmptyParsecs [
+    self
+        should: [ HyperJump withParsecs: #() ]
+        raise: Error
+        withExceptionDo: [ :error |
+            self assert: error messageText equals: 'Hyperjump needs at least one parsec value' ].
+]
+
+{ #category : 'tests' }
+EffectTest >> test013AtomicBombWorksFor1Ship [
+
+	| aBoard aShip aDice aGame anEffect |
+	anEffect := OrderedCollection new.
+	1 to: 10 do: [ :i | anEffect add: NullEffect new. ].
+	anEffect at: 4 put: AtomicBomb new.
+	aBoard := Board withTiles: 10 laps: 1 effect: anEffect.
+	aShip := OrderedCollection with: Ship new.
+	aDice := OrderedCollection with: ( DiceHardcoded withFaces: 3 andValue: 3 ).
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
+	
+self assert: (aGame ships at: 1) position equals: 0.
+]
+
+{ #category : 'tests' }
+EffectTest >> test014AtomicBombWorksForMultipleShips [
+
+	| aBoard aShip aDice aGame anEffect aShip1 |
+	anEffect := OrderedCollection new.
+	1 to: 10 do: [ :i | anEffect add: NullEffect new. ].
+	anEffect at: 4 put: AtomicBomb new.
+	aBoard := Board withTiles: 10 laps: 1 effect: anEffect.
+	aShip := OrderedCollection with: Ship new.
+	aShip1 := Ship new.
+	aShip add: aShip1.
+	aDice := OrderedCollection with: ( DiceHardcoded withFaces: 3 andValue: 3 ).
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
+	
+self assert: (aGame ships at: 1) position equals: 0.
+self assert: (aGame ships at: 2) position equals: 0.
+]
+
+{ #category : 'tests' }
+EffectTest >> test014CannotCreateAGameWithEmptyDiceCollection [
+
+	| aBoard aShip aDice aGame anEffect |
+	anEffect := OrderedCollection new.
+	1 to: 10 do: [ :i | anEffect add: NullEffect new. ].
+	anEffect at: 4 put: AtomicBomb new.
+	aBoard := Board withTiles: 10 laps: 1 effect: anEffect.
+	aShip := OrderedCollection with: Ship new.
+	aDice := OrderedCollection with: ( DiceHardcoded withFaces: 3 andValue: 3 ).
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
+	
+self assert: (aGame ships at: 1) position equals: 0.
+]
+
+{ #category : 'tests' }
+EffectTest >> test015AtomicBombPreservesLaps [
+
+	| aBoard aShip aDice aGame anEffect |
+	anEffect := OrderedCollection new.
+	1 to: 5 do: [ :i | anEffect add: NullEffect new. ].
+	anEffect at: 3 put: AtomicBomb new.
+	aBoard := Board withTiles: 4 laps: 1 effect: anEffect.
+	aShip := OrderedCollection with: Ship new.
+	aDice := OrderedCollection with: ( DiceHardcoded withFaces: 4 andValue: 4 ).
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aGame moveShip.
+	
+self assert: (aGame ships at: 1) laps equals: 1.
+]

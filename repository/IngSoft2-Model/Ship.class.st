@@ -66,3 +66,8 @@ Ship >> moveForward: anInteger onBoard: aBoard [
 Ship >> position [
     ^ currentPosition.
 ]
+
+{ #category : 'accessing' }
+Ship >> resetPosition [
+	currentPosition := 0.
+]
