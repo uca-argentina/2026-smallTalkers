@@ -286,3 +286,16 @@ GameTest >> test018RankingOfShipsWithSamePositionAndLapsAreEqual [
     aGame moveShip.
     self assert: (aGame rankingOf: aShip1) equals: (aGame rankingOf: aShip2).
 ]
+
+{ #category : 'tests' }
+GameTest >> test023AShipCanKnowItsCurrentLap [
+    | aGame aDice aBoard aShip aShip1 |
+    aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 10).
+    aBoard := Board withTiles: 10 laps: 3.
+    aShip := OrderedCollection new.
+    aShip1 := Ship new.
+    aShip add: aShip1.
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aGame moveShip.
+    self assert: (aGame lapsOf: aShip1) equals: 1.
+]

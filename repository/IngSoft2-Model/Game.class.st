@@ -42,6 +42,11 @@ Game >> initializeWithBoard: aBoard ships: aShipCollection dice: aDice [
 ]
 
 { #category : 'as yet unclassified' }
+Game >> lapsOf: aShip [
+    ^ aShip laps
+]
+
+{ #category : 'as yet unclassified' }
 Game >> moveShip [
     | roll currentShipObject |
     self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
