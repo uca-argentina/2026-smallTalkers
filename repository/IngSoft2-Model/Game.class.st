@@ -52,12 +52,19 @@ Game >> moveShip [
     self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
     roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
     currentShipObject := ships at: currentShip.
-    currentShipObject moveForward: roll onBoard: board.           
+    currentShipObject moveForward: roll onBoard: board. 
+	 (board effectAt: currentShipObject position) applyTo: currentShipObject in: self.          
     (board isWinningPosition: currentShipObject laps ) ifTrue: [
         winner := currentShipObject.
         hasEnded := true
     ].
     self advanceTurn.
+]
+
+{ #category : 'as yet unclassified' }
+Game >> moveShip: aShip by: anInteger [
+
+	aShip moveBy: anInteger onBoard: board.
 ]
 
 { #category : 'as yet unclassified' }

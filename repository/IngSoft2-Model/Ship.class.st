@@ -35,6 +35,21 @@ Ship >> laps [
     ^ lapsCompleted .
 ]
 
+{ #category : 'accessing' }
+Ship >> moveBy: anInteger onBoard: aBoard [ 
+
+	currentPosition := currentPosition + anInteger.
+	currentPosition < 0 ifTrue: [
+		lapsCompleted = 0 
+		ifTrue: [ currentPosition := 0 ]
+		ifFalse: [ currentPosition := currentPosition + aBoard totalTiles. ]
+		 ].
+    currentPosition >= aBoard totalTiles ifTrue: [
+		currentPosition := currentPosition - aBoard totalTiles.
+		lapsCompleted := lapsCompleted + 1.
+]
+]
+
 { #category : 'as yet unclassified' }
 Ship >> moveForward: anInteger [ 
     anInteger <= 0 ifTrue: [ Error signal: 'Cannot move zero or negative squares' ].
@@ -44,14 +59,15 @@ Ship >> moveForward: anInteger [
 { #category : 'as yet unclassified' }
 Ship >> moveForward: anInteger onBoard: aBoard [
     anInteger <= 0 ifTrue: [ Error signal: 'Cannot move zero or negative squares' ].
-    currentPosition := currentPosition + anInteger.
-    currentPosition >= aBoard totalTiles ifTrue: [
-		currentPosition := currentPosition - aBoard totalTiles.
-		lapsCompleted := lapsCompleted + 1.
-]
+	self moveBy: anInteger onBoard: aBoard.
 ]
 
 { #category : 'accessing' }
 Ship >> position [
     ^ currentPosition.
+]
+
+{ #category : 'accessing' }
+Ship >> resetPosition [
+	currentPosition := 0.
 ]
