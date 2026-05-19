@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'totalOfTiles',
-		'laps'
+		'laps',
+		'effects'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -22,6 +23,20 @@ Board class >> withTiles: aTotalOfTiles laps: aLapCount [
 	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount .
 ]
 
+{ #category : 'accessing' }
+Board class >> withTiles: aTotalOfTiles laps: aLapCount effect: anEffect [
+	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative tiles.'].
+	aLapCount <= 0 ifTrue: [ Error signal: 	'Cannot create a board with zero or negative laps.'].
+	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount effects: anEffect.
+]
+
+{ #category : 'initialization' }
+Board >> effectAt: aPosition [
+	effects isEmpty ifTrue: [ ^ NullEffect new ].
+	^ effects at: aPosition + 1.
+	
+]
+
 { #category : 'initialization' }
 Board >> initializeWithTiles: aTotalOfTiles [
 
@@ -33,6 +48,14 @@ Board >> initializeWithTiles: aTotalOfTiles laps: aLapCount [
 
 	totalOfTiles := aTotalOfTiles .
 	laps := aLapCount.
+]
+
+{ #category : 'initialization' }
+Board >> initializeWithTiles: aTotalOfTiles laps: aLapCount effects: anEffect [
+
+	totalOfTiles := aTotalOfTiles .
+	laps := aLapCount.
+	effects := anEffect.
 ]
 
 { #category : 'initialization' }
