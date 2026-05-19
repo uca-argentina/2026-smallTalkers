@@ -232,3 +232,57 @@ GameTest >> test015TheGameKnowsWhenItsOverWithLaps [
 	aGame moveShip.
 	self assert: aGame hasEnded 
 ]
+
+{ #category : 'tests' }
+GameTest >> test016RankingOfShipWithMoreLapsIsFirst [
+    | aGame aDice aBoard aShip aShip1 aShip2 |
+    aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 10).
+    aBoard := Board withTiles: 10 laps: 3.
+    aShip := OrderedCollection new.
+    aShip1 := Ship new.
+    aShip2 := Ship new.
+    aShip add: aShip1.
+    aShip add: aShip2.
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aGame moveShip.
+    aGame moveShip.
+    aGame moveShip.
+    self assert: (aGame rankingOf: aShip1) equals: 1.
+    self assert: (aGame rankingOf: aShip2) equals: 2.
+]
+
+{ #category : 'tests' }
+GameTest >> test017RankingOfShipWithHigherPositionIsFirst [
+    | aGame aDice aDice1 aDice2 aBoard aShip aShip1 aShip2 |
+    aDice := OrderedCollection new.
+    aDice1 := DiceHardcoded withFaces: 10 andValue: 7.
+    aDice add: aDice1.
+    aBoard := Board withTiles: 10 laps: 3.
+    aShip := OrderedCollection new.
+    aShip1 := Ship new.
+    aShip2 := Ship new.
+    aShip add: aShip1.
+    aShip add: aShip2.
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aGame moveShip.
+    self assert: (aGame rankingOf: aShip1) equals: 1.
+    self assert: (aGame rankingOf: aShip2) equals: 2.
+]
+
+{ #category : 'tests' }
+GameTest >> test018RankingOfShipsWithSamePositionAndLapsAreEqual [
+    | aGame aDice aBoard aShip aShip1 aShip2 |
+    aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 5).
+    aBoard := Board withTiles: 10 laps: 3.
+    aShip := OrderedCollection new.
+    aShip1 := Ship new.
+    aShip2 := Ship new.
+    aShip add: aShip1.
+    aShip add: aShip2.
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aGame moveShip.
+    aGame moveShip.
+    aGame moveShip.
+    aGame moveShip.
+    self assert: (aGame rankingOf: aShip1) equals: (aGame rankingOf: aShip2).
+]

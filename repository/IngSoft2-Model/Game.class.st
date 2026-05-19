@@ -61,6 +61,17 @@ Game >> positionOf: aShip [
 ]
 
 { #category : 'as yet unclassified' }
+Game >> rankingOf: aShip [
+    | shipsAhead |
+    shipsAhead := ships count: [ :each | 
+        (each laps > aShip laps) or: [ 
+            (each laps = aShip laps) and: [ each position > aShip position ] 
+        ]
+    ].
+    ^ shipsAhead + 1.
+]
+
+{ #category : 'as yet unclassified' }
 Game >> ships [
     ^ ships
 ]
