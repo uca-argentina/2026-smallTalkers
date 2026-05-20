@@ -2,7 +2,8 @@ Class {
 	#name : 'Ship',
 	#superclass : 'Object',
 	#instVars : [
-		'currentPosition'
+		'currentPosition',
+		'lapsCompleted'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -13,9 +14,15 @@ Ship class >> new [
 	^ super new initializeWith: 0.
 ]
 
+{ #category : 'accessing' }
+Ship >> completeLap [
+    lapsCompleted := lapsCompleted + 1
+]
+
 { #category : 'as yet unclassified' }
 Ship >> initializeWith: anInteger [
     currentPosition := anInteger.
+	 lapsCompleted := 0.
 ]
 
 { #category : 'accessing' }
@@ -23,13 +30,44 @@ Ship >> isNull [
 	^ false.
 ]
 
-{ #category : 'as yet unclassified' }
-Ship >> moveForward: anInteger [
+{ #category : 'accessing' }
+Ship >> laps [
+    ^ lapsCompleted .
+]
+
+{ #category : 'accessing' }
+Ship >> moveBy: anInteger onBoard: aBoard [ 
+
+	currentPosition := currentPosition + anInteger.
+	currentPosition < 0 ifTrue: [
+		lapsCompleted = 0 
+		ifTrue: [ currentPosition := 0 ]
+		ifFalse: [ currentPosition := currentPosition + aBoard totalTiles. ]
+		 ].
+    currentPosition >= aBoard totalTiles ifTrue: [
+		currentPosition := currentPosition - aBoard totalTiles.
+		lapsCompleted := lapsCompleted + 1.
+]
+]
+
+{ #category : 'accessing' }
+Ship >> moveForward: anInteger [ 
     anInteger <= 0 ifTrue: [ Error signal: 'Cannot move zero or negative squares' ].
     currentPosition := currentPosition + anInteger.
+]
+
+{ #category : 'as yet unclassified' }
+Ship >> moveForward: anInteger onBoard: aBoard [
+    anInteger <= 0 ifTrue: [ Error signal: 'Cannot move zero or negative squares' ].
+	self moveBy: anInteger onBoard: aBoard.
 ]
 
 { #category : 'accessing' }
 Ship >> position [
     ^ currentPosition.
+]
+
+{ #category : 'accessing' }
+Ship >> resetPosition [
+	currentPosition := 0.
 ]

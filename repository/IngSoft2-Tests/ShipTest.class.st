@@ -59,3 +59,21 @@ ShipTest >> test005AShipCannotMoveForwardNegativeSquares [
 				assert: e messageText
 				equals: 'Cannot move zero or negative squares' ]
 ]
+
+{ #category : 'tests' }
+ShipTest >> test006AShipCompletedLapsStartsAtZero [ 
+	
+	| aShip |
+	aShip := Ship new.
+	
+	self assert: aShip laps equals: 0
+]
+
+{ #category : 'tests' }
+ShipTest >> test007AShipKnowsWhenItCompletesALap [
+	
+	| aShip |
+	aShip := Ship new.
+	aShip completeLap.
+	self assert: aShip laps equals: 1
+]
