@@ -11,16 +11,21 @@ Class {
 }
 
 { #category : 'accessing' }
-Board class >> withTiles: aTotalOfTiles [
-	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative tiles.'].
-	^ self new initializeWithTiles: aTotalOfTiles laps: 1.
+Board class >> withTiles: arg1 [
+
+	arg1 <= 0 ifTrue: [
+		Error signal: 'Cannot create a board with zero or negative tiles.' ].
+	^ self new initializeWithTiles: arg1 laps: 1
 ]
 
 { #category : 'accessing' }
-Board class >> withTiles: aTotalOfTiles laps: aLapCount [
-	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative tiles.'].
-	aLapCount <= 0 ifTrue: [ Error signal: 	'Cannot create a board with zero or negative laps.'].
-	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount .
+Board class >> withTiles: arg1 laps: arg2 [
+
+	arg1 <= 0 ifTrue: [
+		Error signal: 'Cannot create a board with zero or negative tiles.' ].
+	arg2 <= 0 ifTrue: [
+		Error signal: 'Cannot create a board with zero or negative laps.' ].
+	^ self new initializeWithTiles: arg1 laps: arg2
 ]
 
 { #category : 'accessing' }
@@ -62,9 +67,9 @@ Board >> initializeWithTiles: aTotalOfTiles laps: aLapCount effects: anEffect [
 ]
 
 { #category : 'initialization' }
-Board >> isWinningPosition: aLap [
+Board >> isWinningPosition: arg1 [
 
- ^ aLap >= laps 
+	^ arg1 >= laps
 ]
 
 { #category : 'initialization' }
@@ -75,5 +80,6 @@ Board >> totalLaps [
 
 { #category : 'initialization' }
 Board >> totalTiles [
-	^ totalOfTiles 
+
+	^ totalOfTiles
 ]

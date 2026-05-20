@@ -50,7 +50,7 @@ Ship >> moveBy: anInteger onBoard: aBoard [
 ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Ship >> moveForward: anInteger [ 
     anInteger <= 0 ifTrue: [ Error signal: 'Cannot move zero or negative squares' ].
     currentPosition := currentPosition + anInteger.
