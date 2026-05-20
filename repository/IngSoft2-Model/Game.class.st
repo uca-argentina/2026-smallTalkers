@@ -2,68 +2,48 @@ Class {
 	#name : 'Game',
 	#superclass : 'Object',
 	#instVars : [
-		'totalOfTiles',
 		'winner',
-		'positions',
+		'ships',
 		'currentShip',
 		'dice',
-		'board'
+		'board',
+		'hasEnded'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
-{ #category : 'accessing' }
-Game class >> default [
-	| aBoard |
-	aBoard := Board withTiles: 10.
-	^ self new initializeWithBoard: aBoard ships: 1.
-]
-
-{ #category : 'accessing' }
-Game class >> withBoard: aBoard [
-	^ self new initializeWithBoard: aBoard ships: 1.
-]
-
 { #category : 'as yet unclassified' }
-Game class >> withBoard: aBoard ships: aShipCount [
-	^ self new initializeWithBoard: aBoard ships: aShipCount
-]
+Game class >> withBoard: aBoard ships: aShipCollection dice: aDice [
 
-{ #category : 'as yet unclassified' }
-Game class >> withBoard: aBoard ships: aShipCount dice: aDice [
-
-	aShipCount <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
+	aShipCollection size <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
 	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
-	^ self new initializeWithBoard: aBoard ships: aShipCount dice: aDice
+	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice
 ]
 
 { #category : 'as yet unclassified' }
 Game >> advanceTurn [
-	currentShip := (currentShip rem:positions size) + 1
+	currentShip := (currentShip rem: ships size) + 1
 ]
 
 { #category : 'testing' }
 Game >> hasEnded [
- 	^ winner isNull not.
+ 	^ hasEnded 
 ]
 
 { #category : 'testing' }
-Game >> initializeWithBoard: aBoard  ships: aShipCount [
-
-	board := aBoard .
-	positions := Array new: aShipCount withAll: 0.
-	winner := NullShip new.
-	currentShip := 1
-]
-
-{ #category : 'testing' }
-Game >> initializeWithBoard: aBoard ships: aShipCount dice: aDice [
+Game >> initializeWithBoard: aBoard ships: aShipCollection dice: aDice [
     board := aBoard.
-    positions := (1 to: aShipCount) collect: [ :i | Ship new ].
+    ships := aShipCollection.
     winner := NullShip new.
+	 hasEnded := false.
     currentShip := 1.
     dice := aDice.
+]
+
+{ #category : 'as yet unclassified' }
+Game >> lapsOf: aShip [
+    ^ aShip laps
 ]
 
 { #category : 'as yet unclassified' }
@@ -71,10 +51,20 @@ Game >> moveShip [
     | roll currentShipObject |
     self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
     roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
-    currentShipObject := positions at: currentShip.
-    currentShipObject moveForward: roll.
-    (board isWinningPosition: currentShipObject position) ifTrue: [ winner := currentShipObject ].
+    currentShipObject := ships at: currentShip.
+    currentShipObject moveForward: roll onBoard: board. 
+	 (board effectAt: currentShipObject position) applyTo: currentShipObject in: self.          
+    (board isWinningPosition: currentShipObject laps ) ifTrue: [
+        winner := currentShipObject.
+        hasEnded := true
+    ].
     self advanceTurn.
+]
+
+{ #category : 'as yet unclassified' }
+Game >> moveShip: aShip by: anInteger [
+
+	aShip moveBy: anInteger onBoard: board.
 ]
 
 { #category : 'as yet unclassified' }
@@ -83,8 +73,19 @@ Game >> positionOf: aShip [
 ]
 
 { #category : 'as yet unclassified' }
+Game >> rankingOf: aShip [
+    | shipsAhead |
+    shipsAhead := ships count: [ :each | 
+        (each laps > aShip laps) or: [ 
+            (each laps = aShip laps) and: [ each position > aShip position ] 
+        ]
+    ].
+    ^ shipsAhead + 1.
+]
+
+{ #category : 'as yet unclassified' }
 Game >> ships [
-    ^ positions
+    ^ ships
 ]
 
 { #category : 'as yet unclassified' }

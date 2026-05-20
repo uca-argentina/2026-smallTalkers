@@ -6,28 +6,24 @@ Class {
 }
 
 { #category : 'tests' }
-DiceTest >> test001DiceReturnsNumberInRange [
-
-| resultado aDice |
-aDice:= Dice default.
-resultado:= aDice roll.
-
-self assert: (resultado between: 1 and: 3 )
-]
-
-{ #category : 'tests' }
-DiceTest >> test002DiceReturnsNumberInConfigurableRange [
-
-| resultado aDice |
-aDice:= Dice withFaces: 6.
-resultado:= aDice roll.
-
-self assert: (resultado between: 1 and: 6 )
-]
-
-{ #category : 'tests' }
-DiceTest >> test003ADiceCannotBeInitializedIfItHasLessThan3Faces [
+DiceTest >> test001ADiceCannotBeInitializedIfItHasLessThan3Faces [
 
 | aDice |
 self should:[aDice:= Dice withFaces: 1] raise: Error  withExceptionDo: [:error | self assert: error messageText equals:'A dice cannot have less than 3 faces']
+]
+
+{ #category : 'tests' }
+DiceTest >> test002ADiceRollNeverReturnsValueBelowOne [ 
+	| aDice results |
+	aDice := Dice withFaces: 6.
+	results := (1 to: 100) collect: [ :rolls | aDice roll ].
+	self assert: (results allSatisfy: [ :roll | roll >= 1 ]).
+]
+
+{ #category : 'tests' }
+DiceTest >> test003ADiceRollNeverExceedsNumberOfFaces [ 
+	| aDice results |
+	aDice := Dice withFaces: 6.
+	results := (1 to: 100) collect: [ :rolls | aDice roll ].
+	self assert: (results allSatisfy: [ :roll | roll <= 6 ]).
 ]
