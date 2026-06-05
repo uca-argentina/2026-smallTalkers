@@ -29,11 +29,10 @@ Board class >> withTiles: arg1 laps: arg2 [
 ]
 
 { #category : 'accessing' }
-Board class >> withTiles: aTotalOfTiles laps: aLapCount effect: anEffect [
+Board class >> withTiles: aTotalOfTiles laps: aLapCount effects: aCollection [
 	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative tiles.'].
 	aLapCount <= 0 ifTrue: [ Error signal: 	'Cannot create a board with zero or negative laps.'].
-	anEffect generateEffectsFor: aTotalOfTiles.
-	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount effects: anEffect.
+	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount effects: aCollection.
 ]
 
 { #category : 'initialization' }

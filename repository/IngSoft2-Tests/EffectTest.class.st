@@ -6,16 +6,17 @@ Class {
 }
 
 { #category : 'tests' }
-EffectTest >> test001SpeedUpAdvancesShip4Tiles [ [
+EffectTest >> test001SpeedUpAdvancesShip4Tiles [
 
-    | aBoard aShip aDice aGame aRolls |
+    | aBoard aShip aDice aGame aRolls anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.70 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-    aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 3 andValue: 3).
     aGame := Game withBoard: aBoard ships: aShip dice: aDice.
@@ -23,19 +24,19 @@ EffectTest >> test001SpeedUpAdvancesShip4Tiles [ [
 
     self assert: (aGame ships at: 1) position equals: 7
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test002SpeedUpDoesNotAffectOtherShips [ [
+EffectTest >> test002SpeedUpDoesNotAffectOtherShips [
 
-    | aBoard aShip aDice aGame aShip2 aRolls |
+    | aBoard aShip aDice aGame aShip2 aRolls anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.70 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-    aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aShip2 := Ship new.
     aShip add: aShip2.
@@ -45,19 +46,19 @@ EffectTest >> test002SpeedUpDoesNotAffectOtherShips [ [
 
     self assert: (aGame ships at: 2) position equals: 0
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test003WormholeRollsBackAShip4Tiles [ [
+EffectTest >> test003WormholeRollsBackAShip4Tiles [
 
-    | aBoard aShip aDice aGame  aRolls |
+    | aBoard aShip aDice aGame aRolls anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 8
             ifTrue: [ aRolls add: 0.50 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
- 	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 7 andValue: 7).
     aGame := Game withBoard: aBoard ships: aShip dice: aDice.
@@ -65,19 +66,19 @@ EffectTest >> test003WormholeRollsBackAShip4Tiles [ [
 
     self assert: (aGame ships at: 1) position equals: 3
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test004IfTheGameJustStartedWormholeRollsBackTo0 [ [
+EffectTest >> test004IfTheGameJustStartedWormholeRollsBackTo0 [
 
-    | aBoard aShip aDice aGame  aRolls |
+    | aBoard aShip aDice aGame aRolls anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.50 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 3 andValue: 3).
     aGame := Game withBoard: aBoard ships: aShip dice: aDice.
@@ -85,19 +86,19 @@ EffectTest >> test004IfTheGameJustStartedWormholeRollsBackTo0 [ [
 
     self assert: (aGame ships at: 1) position equals: 0
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test005WormholeDoesNotAffectOtherShips [ [
+EffectTest >> test005WormholeDoesNotAffectOtherShips [
 
-    | aBoard aShip aDice aGame  aShip2 aRolls |
+    | aBoard aShip aDice aGame aShip2 aRolls anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.50 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aShip2 := Ship new.
     aShip add: aShip2.
@@ -107,12 +108,11 @@ EffectTest >> test005WormholeDoesNotAffectOtherShips [ [
 
     self assert: (aGame ships at: 2) position equals: 0
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test006MoonWalkSendsOtherShipsBackNTiles [ [
+EffectTest >> test006MoonWalkSendsOtherShipsBackNTiles [
 
-    | aBoard aShip aDice aGame aShip2 aRolls aSteps |
+    | aBoard aShip aDice aGame aShip2 aRolls aSteps anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
@@ -120,7 +120,8 @@ EffectTest >> test006MoonWalkSendsOtherShipsBackNTiles [ [
             ifFalse: [ aRolls add: 0.10 ]
     ].
     aSteps := OrderedCollection with: 3.
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: aSteps parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: aSteps parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aShip2 := Ship new.
     aShip add: aShip2.
@@ -132,12 +133,11 @@ EffectTest >> test006MoonWalkSendsOtherShipsBackNTiles [ [
 
     self assert: (aGame ships at: 2) position equals: 0
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test007MoonWalkDoesNotAffectTheShipThatLanded [ [
+EffectTest >> test007MoonWalkDoesNotAffectTheShipThatLanded [
 
-    | aBoard aShip aDice aGame aShip2 aRolls aSteps |
+    | aBoard aShip aDice aGame aShip2 aRolls aSteps anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 8
@@ -145,7 +145,8 @@ EffectTest >> test007MoonWalkDoesNotAffectTheShipThatLanded [ [
             ifFalse: [ aRolls add: 0.10 ]
     ].
     aSteps := OrderedCollection with: 3.
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: aSteps parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: aSteps parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aShip2 := Ship new.
     aShip add: aShip2.
@@ -156,7 +157,6 @@ EffectTest >> test007MoonWalkDoesNotAffectTheShipThatLanded [ [
     aGame moveShip.
 
     self assert: (aGame ships at: 1) position equals: 6
-]
 ]
 
 { #category : 'tests' }
@@ -179,17 +179,21 @@ EffectTest >> test009MoonWalkCannotBeCreatedWithNegativeN [
 ]
 
 { #category : 'tests' }
-EffectTest >> test010HyperJumpUsesFirstValueOnFirstLanding [ [
+EffectTest >> test010HyperJumpUsesFirstValueOnFirstLanding [
 
-    | aBoard aShip aDice aGame aRolls aParsecs |
+    | aBoard aShip aDice aGame aRolls aParsecs anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.95 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-    aParsecs := OrderedCollection with: 5 with: 2 with: 1.
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: aParsecs).
+	aParsecs := OrderedCollection 
+    with: (OrderedCollection with: 5 with: 2 with: 1)
+    with: (OrderedCollection with: 2 with: 1)
+    with: (OrderedCollection with: 1).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: aParsecs) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 3 andValue: 3).
     aGame := Game withBoard: aBoard ships: aShip dice: aDice.
@@ -197,20 +201,23 @@ EffectTest >> test010HyperJumpUsesFirstValueOnFirstLanding [ [
 
     self assert: (aGame ships at: 1) position equals: 8
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test011HyperJumpUsesSecondParsecValueInSecondLanding [ [
+EffectTest >> test011HyperJumpUsesSecondParsecValueInSecondLanding [
 
-    | aBoard aShip aDice aGame aShip2 aRolls aParsecs |
+    | aBoard aShip aDice aGame aShip2 aRolls aParsecs anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.95 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-    aParsecs := OrderedCollection with: 5 with: 2 with: 1.
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: aParsecs).
+	aParsecs := OrderedCollection 
+    with: (OrderedCollection with: 5 with: 2 with: 1)
+    with: (OrderedCollection with: 2 with: 1)
+    with: (OrderedCollection with: 1).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: aParsecs) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aShip2 := Ship new.
     aShip add: aShip2.
@@ -220,7 +227,6 @@ EffectTest >> test011HyperJumpUsesSecondParsecValueInSecondLanding [ [
     aGame moveShip.
 
     self assert: (aGame ships at: 2) position equals: 5
-]
 ]
 
 { #category : 'tests' }
@@ -233,16 +239,17 @@ EffectTest >> test012HyperJumpCannotBeCreatedWithEmptyParsecs [
 ]
 
 { #category : 'tests' }
-EffectTest >> test013AtomicBombWorksFor1Ship [ [
+EffectTest >> test013AtomicBombWorksFor1Ship [
 
-    | aBoard aShip aDice aGame aRolls |
+    | aBoard aShip aDice aGame aRolls anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.99 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 3 andValue: 3).
     aGame := Game withBoard: aBoard ships: aShip dice: aDice.
@@ -250,20 +257,19 @@ EffectTest >> test013AtomicBombWorksFor1Ship [ [
 
     self assert: (aGame ships at: 1) position equals: 0.
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test014AtomicBombWorksForMultipleShips [ | aShip1 |
-[
+EffectTest >> test014AtomicBombWorksForMultipleShips [
 
-    | aBoard aShip aDice aGame aRolls |
+    | aBoard aShip aDice aGame aRolls aShip1 anEffects |
     aRolls := OrderedCollection new.
     1 to: 10 do: [ :i |
         i = 4
             ifTrue: [ aRolls add: 0.99 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 10.
+    aBoard := Board withTiles: 10 laps: 1 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
     aShip1 := Ship new.
     aShip add: aShip1.
@@ -274,24 +280,24 @@ EffectTest >> test014AtomicBombWorksForMultipleShips [ | aShip1 |
     self assert: (aGame ships at: 1) position equals: 0.
     self assert: (aGame ships at: 2) position equals: 0.
 ]
-]
 
 { #category : 'tests' }
-EffectTest >> test015AtomicBombPreservesLaps [ [
+EffectTest >> test015AtomicBombPreservesLaps [
 
-    | aBoard aShip aDice aGame aRolls |
+    | aBoard aShip aDice aGame aRolls anEffects |
     aRolls := OrderedCollection new.
     1 to: 5 do: [ :i |
         i = 3
             ifTrue: [ aRolls add: 0.99 ]
             ifFalse: [ aRolls add: 0.10 ]
     ].
-	 aBoard := Board withTiles: 10 laps: 1 effect: (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new).
+    anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new) generateEffectsFor: 5.
+	aBoard := Board withTiles: 5 laps: 2 effects: anEffects.
     aShip := OrderedCollection with: Ship new.
-    aDice := OrderedCollection with: (DiceHardcoded withFaces: 4 andValue: 4).
+
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 7 andValue: 7).
     aGame := Game withBoard: aBoard ships: aShip dice: aDice.
     aGame moveShip.
 
     self assert: (aGame ships at: 1) laps equals: 1.
-]
 ]
