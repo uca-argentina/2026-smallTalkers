@@ -37,17 +37,17 @@ Ship >> laps [
 
 { #category : 'accessing' }
 Ship >> moveBy: anInteger onBoard: aBoard [ 
+	| tiles newPosition |
+	tiles := aBoard totalTiles.
+	newPosition := currentPosition + anInteger.
+ 
+	newPosition < 0 ifTrue: [
+		currentPosition := 0 ]
+	ifFalse: [
+		lapsCompleted := lapsCompleted + (newPosition // tiles).
+		currentPosition := newPosition \\ tiles.
+	].
 
-	currentPosition := currentPosition + anInteger.
-	currentPosition < 0 ifTrue: [
-		lapsCompleted = 0 
-		ifTrue: [ currentPosition := 0 ]
-		ifFalse: [ currentPosition := currentPosition + aBoard totalTiles. ]
-		 ].
-    currentPosition >= aBoard totalTiles ifTrue: [
-		currentPosition := currentPosition - aBoard totalTiles.
-		lapsCompleted := lapsCompleted + 1.
-]
 ]
 
 { #category : 'accessing' }

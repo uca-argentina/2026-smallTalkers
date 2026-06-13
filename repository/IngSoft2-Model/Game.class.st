@@ -47,6 +47,15 @@ Game >> lapsOf: aShip [
 ]
 
 { #category : 'as yet unclassified' }
+Game >> moveAllShipsExcept: aShip by: anInteger [ 
+	"Usado por MoonWalk: mueve todas las naves excepto la indicada"
+	ships do: [ :each |
+		each = aShip ifFalse: [ self moveShip: each by: anInteger ]
+	]
+
+]
+
+{ #category : 'as yet unclassified' }
 Game >> moveShip [
     | roll currentShipObject |
     self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
@@ -68,6 +77,12 @@ Game >> moveShip: aShip by: anInteger [
 ]
 
 { #category : 'as yet unclassified' }
+Game >> parsecsToTiles: aParsecs [ 
+	"Delega la conversión al tablero, que conoce su longitud en parsecs."
+	^ board parsecsToTiles: aParsecs
+]
+
+{ #category : 'as yet unclassified' }
 Game >> positionOf: aShip [
     ^ aShip position
 ]
@@ -81,6 +96,33 @@ Game >> rankingOf: aShip [
         ]
     ].
     ^ shipsAhead + 1.
+]
+
+{ #category : 'as yet unclassified' }
+Game >> resetAllShips [ 
+	ships do: [ :each | each resetPosition ]
+
+ 
+
+]
+
+{ #category : 'as yet unclassified' }
+Game >> shipAt: anIndex [ 
+	^ ships at: anIndex
+
+
+ 
+
+]
+
+{ #category : 'as yet unclassified' }
+Game >> shipCount [ 
+	^ ships size
+
+
+
+ 
+
 ]
 
 { #category : 'as yet unclassified' }

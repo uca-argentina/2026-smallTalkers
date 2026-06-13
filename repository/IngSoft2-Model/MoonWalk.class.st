@@ -17,8 +17,7 @@ anInteger <= 0 ifTrue: [ Error signal: 'MoonWalk steps must be positive' ].
 
 { #category : 'as yet unclassified' }
 MoonWalk >> applyTo: aShip in: aGame [
-
-aGame ships do: [ :i | i = aShip ifFalse: [ aGame moveShip: i by: n negated] ]
+aGame moveAllShipsExcept: aShip by: n negated
 
 
 ]

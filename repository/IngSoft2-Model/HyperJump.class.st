@@ -19,10 +19,11 @@ aCollection isEmpty ifTrue: [ Error signal: 'Hyperjump needs at least one parsec
 { #category : 'as yet unclassified' }
 HyperJump >> applyTo: aShip in: aGame [
 
-| parsecs |
-parsecs := parsecsList at: currentIndex.
-aGame moveShip: aShip by: parsecs.
-currentIndex := (currentIndex rem: parsecsList size) + 1.
+	| parsecs tiles |
+	parsecs := parsecsList at: currentIndex.
+	tiles := aGame parsecsToTiles: parsecs.
+	aGame moveShip: aShip by: tiles.
+	currentIndex := (currentIndex rem: parsecsList size) + 1.
 
 
 ]
