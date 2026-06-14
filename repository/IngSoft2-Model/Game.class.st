@@ -22,7 +22,7 @@ Game class >> withBoard: aBoard ships: aShipCollection dice: aDice [
 
 	aShipCollection size <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
 	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
-	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice cardDeck: OrderedCollection new
+	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice cardDeck: (OrderedCollection with: NullCard with: NullCard with: NullCard with: NullCard with: NullCard with: NullCard).
 ]
 
 { #category : 'as yet unclassified' }
