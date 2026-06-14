@@ -39,6 +39,12 @@ Game >> advanceTurn [
 	currentShip := (currentShip rem: ships size) + 1
 ]
 
+{ #category : 'as yet unclassified' }
+Game >> drawCard [
+	^ cardDeck draw
+
+]
+
 { #category : 'testing' }
 Game >> hasEnded [
 
@@ -67,11 +73,10 @@ Game >> initializeWithBoard: aBoard ships: aShipCollection dice: aDice cardDeck:
 	 activePermanentCards := OrderedCollection new.
 	 lastTileEffect := NullEffect new.
 	 lastEffectiveCard := nil.
-	"Deal 2 cards to each ship at game start"
-	ships do: [ :ship |
-		ship receiveCard: cardDeck draw.
-		ship receiveCard: cardDeck draw.
-	].
+	 ships do: [ :ship |
+			ship receiveCard: cardDeck draw.
+			ship receiveCard: cardDeck draw.
+		].
 ]
 
 { #category : 'as yet unclassified' }

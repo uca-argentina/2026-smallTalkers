@@ -65,3 +65,21 @@ CardTest >> test005RemovingAbsentCardRaisesError [
 
 
 ]
+
+{ #category : 'tests' }
+CardTest >> test006CardTileGivesOneCardToShip [ 
+	| ship game effects board dice aCardDeck |
+	effects := OrderedCollection new.
+	19 timesRepeat: [ effects add: NullEffect new ].
+	effects add: CardTile new.
+	board := Board withTiles: 20 laps: 3 effects: effects.
+	ship := Ship new.
+	dice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 3).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	game := Game withBoard: board ships: (OrderedCollection with: ship) dice: dice cardDeck: aCardDeck.
+	(board effectAt: 19) applyTo: ship in: game.
+	self assert: ship hand size equals: 3.
+
+
+
+]
