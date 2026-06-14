@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'currentPosition',
-		'lapsCompleted'
+		'lapsCompleted',
+		'hand'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -11,28 +12,45 @@ Class {
 
 { #category : 'instance creation' }
 Ship class >> new [
-	^ super new initializeWith: 0.
+
+	^ super new initializeWith: 0
 ]
 
 { #category : 'accessing' }
 Ship >> completeLap [
-    lapsCompleted := lapsCompleted + 1
+
+	lapsCompleted := lapsCompleted + 1
+]
+
+{ #category : 'accessing' }
+Ship >> hand [ 
+	^ hand 
+
+]
+
+{ #category : 'accessing' }
+Ship >> hasCard: aCard [ 
+	^ hand includes: aCard
+
 ]
 
 { #category : 'as yet unclassified' }
 Ship >> initializeWith: anInteger [
     currentPosition := anInteger.
 	 lapsCompleted := 0.
+	 hand := OrderedCollection new.
 ]
 
 { #category : 'accessing' }
 Ship >> isNull [
-	^ false.
+
+	^ false
 ]
 
 { #category : 'accessing' }
 Ship >> laps [
-    ^ lapsCompleted .
+
+	^ lapsCompleted
 ]
 
 { #category : 'accessing' }
@@ -64,7 +82,20 @@ Ship >> moveForward: anInteger onBoard: aBoard [
 
 { #category : 'accessing' }
 Ship >> position [
-    ^ currentPosition.
+
+	^ currentPosition
+]
+
+{ #category : 'accessing' }
+Ship >> receiveCard: aCard [ 
+	hand add: aCard.
+
+]
+
+{ #category : 'accessing' }
+Ship >> removeCard: aCard [ 
+	hand remove: aCard ifAbsent: [ Error signal: 'Card not in hand' ].
+
 ]
 
 { #category : 'accessing' }

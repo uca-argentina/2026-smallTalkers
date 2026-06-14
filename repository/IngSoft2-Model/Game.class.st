@@ -7,7 +7,11 @@ Class {
 		'currentShip',
 		'dice',
 		'board',
-		'hasEnded'
+		'hasEnded',
+		'cardDeck',
+		'activePermanentCards',
+		'lastTileEffect',
+		'lastEffectiveCard'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -18,17 +22,27 @@ Game class >> withBoard: aBoard ships: aShipCollection dice: aDice [
 
 	aShipCollection size <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
 	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
-	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice
+	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice cardDeck: OrderedCollection new
+]
+
+{ #category : 'as yet unclassified' }
+Game class >> withBoard: aBoard ships: aShipCollection dice: aDice cardDeck: aDeck [
+
+	aShipCollection size <= 0 ifTrue: [ Error signal: 'The Ship Count Cannot Be 0' ].
+	aDice isEmpty ifTrue: [ Error signal: 'The Dice Collection Cannot Be Empty' ].
+	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice cardDeck: aDeck 
 ]
 
 { #category : 'as yet unclassified' }
 Game >> advanceTurn [
+
 	currentShip := (currentShip rem: ships size) + 1
 ]
 
 { #category : 'testing' }
 Game >> hasEnded [
- 	^ hasEnded 
+
+	^ hasEnded
 ]
 
 { #category : 'testing' }
@@ -39,6 +53,25 @@ Game >> initializeWithBoard: aBoard ships: aShipCollection dice: aDice [
 	 hasEnded := false.
     currentShip := 1.
     dice := aDice.
+]
+
+{ #category : 'testing' }
+Game >> initializeWithBoard: aBoard ships: aShipCollection dice: aDice cardDeck: aDeck [
+    board := aBoard.
+    ships := aShipCollection.
+    winner := NullShip new.
+	 hasEnded := false.
+    currentShip := 1.
+    dice := aDice.
+	 cardDeck := aDeck.
+	 activePermanentCards := OrderedCollection new.
+	 lastTileEffect := NullEffect new.
+	 lastEffectiveCard := nil.
+	"Deal 2 cards to each ship at game start"
+	ships do: [ :ship |
+		ship receiveCard: cardDeck draw.
+		ship receiveCard: cardDeck draw.
+	].
 ]
 
 { #category : 'as yet unclassified' }
@@ -83,8 +116,9 @@ Game >> parsecsToTiles: aParsecs [
 ]
 
 { #category : 'as yet unclassified' }
-Game >> positionOf: aShip [
-    ^ aShip position
+Game >> positionOf: arg1 [
+
+	^ arg1 position
 ]
 
 { #category : 'as yet unclassified' }
@@ -127,7 +161,8 @@ Game >> shipCount [
 
 { #category : 'as yet unclassified' }
 Game >> ships [
-    ^ ships
+
+	^ ships
 ]
 
 { #category : 'as yet unclassified' }
