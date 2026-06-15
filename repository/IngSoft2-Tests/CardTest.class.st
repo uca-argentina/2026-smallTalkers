@@ -267,3 +267,87 @@ CardTest >> test015OverloadCannotBePlayedWhenGameHasEnded [
 		raise: Error
 		withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ].
 ]
+
+{ #category : 'tests' }
+CardTest >> test016RedoRepeatsLastPlayedOverloadEffect [
+	| aGame aDice aBoard ship1 aShips aCardDeck overload redo |
+	aBoard := Board withTiles: 20.
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 5).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	overload := OverloadCard new.
+	redo := RedoCard new.
+	ship1 receiveCard: overload.
+	ship1 receiveCard: redo.
+
+	"se juega Overload sobre ship1"
+	overload play: ship1 in: aGame target: ship1.
+
+	"Redo: se elige a ship1 nuevamente -> activa otro Overload sobre ship1"
+	redo play: ship1 in: aGame target: ship1.
+
+	"dado=5, dos Overloads activos (-2 cada uno) -> roll total = 1"
+	aGame moveShip.
+	self assert: ship1 position equals: 1.
+]
+
+{ #category : 'tests' }
+CardTest >> test017RedoRepeatsLastPlayedRepeatEffect [
+	| aGame aDice aBoard ship1 aShips aCardDeck repeat redo effects |
+	effects := OrderedCollection new.
+	effects add: NullEffect new.   "indice 1 -> posicion 0"
+	effects add: NullEffect new.   "indice 2 -> posicion 1"
+	effects add: SpeedUp new.       "indice 3 -> posicion 2"
+	7 timesRepeat: [ effects add: NullEffect new ].
+
+	aBoard := Board withTiles: 20 laps: 1 effects: effects.
+
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 2).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	repeat := RepeatCard new.
+	redo := RedoCard new.
+	ship1 receiveCard: repeat.
+	ship1 receiveCard: redo.
+
+	"ship1 tira 2 -> cae en posicion 2 (SpeedUp) -> avanza 4 -> queda en posicion 6"
+	aGame moveShip.
+	self assert: ship1 position equals: 6.
+
+	"se juega Repeat eligiendo ship1 -> SpeedUp se aplica de nuevo -> posicion 10"
+	repeat play: ship1 in: aGame on: ship1.
+	self assert: ship1 position equals: 10.
+
+	"Redo: la ultima jugada fue Repeat -> repite ESE efecto (SpeedUp) sobre ship1 -> posicion 14"
+	redo play: ship1 in: aGame target: ship1.
+	self assert: ship1 position equals: 14.
+]
+
+{ #category : 'tests' }
+CardTest >> test018RedoCannotBePlayedWhenGameHasEnded [
+	| aGame aDice aBoard ship1 aShips aCardDeck redo |
+	aBoard := Board withTiles: 1.
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 1).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	redo := RedoCard new.
+	ship1 receiveCard: redo.
+
+	"board de 1 tile -> termina el juego"
+	aGame moveShip.
+	self assert: aGame hasEnded.
+
+	self should: [ redo play: ship1 in: aGame target: ship1 ]
+		raise: Error
+		withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ].
+]

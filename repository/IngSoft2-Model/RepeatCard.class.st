@@ -14,4 +14,5 @@ RepeatCard >> isPermanent [
 RepeatCard >> play: aShip in: aGame on: aTargetShip [
 	aGame hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
 	aGame lastTileEffect applyTo: aTargetShip in: aGame.
+	aGame setLastEffectiveCard: self.
 ]

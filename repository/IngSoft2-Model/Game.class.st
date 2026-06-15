@@ -94,6 +94,11 @@ Game >> lapsOf: aShip [
     ^ aShip laps
 ]
 
+{ #category : 'accessing' }
+Game >> lastEffectiveCard [
+	^ lastEffectiveCard
+]
+
 { #category : 'as yet unclassified' }
 Game >> lastTileEffect [
 	^ lastTileEffect
@@ -162,6 +167,11 @@ Game >> resetAllShips [
 
  
 
+]
+
+{ #category : 'accessing' }
+Game >> setLastEffectiveCard: aCard [
+	lastEffectiveCard := aCard
 ]
 
 { #category : 'as yet unclassified' }

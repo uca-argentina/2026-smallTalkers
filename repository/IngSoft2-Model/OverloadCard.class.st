@@ -19,4 +19,5 @@ OverloadCard >> isPermanent [
 OverloadCard >> play: aShip in: aGame target: aTargetShip [
 	aGame hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
 	aGame addPermanentCard: self target: aTargetShip.
+	aGame setLastEffectiveCard: self.
 ]
