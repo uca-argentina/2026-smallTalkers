@@ -33,6 +33,16 @@ Game class >> withBoard: aBoard ships: aShipCollection dice: aDice cardDeck: aDe
 	^ self new initializeWithBoard: aBoard ships: aShipCollection dice: aDice cardDeck: aDeck 
 ]
 
+{ #category : 'adding' }
+Game >> activePermanentCards [
+	^ activePermanentCards
+]
+
+{ #category : 'adding' }
+Game >> addPermanentCard: aCard target: aTargetShip [
+	activePermanentCards add: aCard -> aTargetShip.
+]
+
 { #category : 'as yet unclassified' }
 Game >> advanceTurn [
 
@@ -85,6 +95,11 @@ Game >> lapsOf: aShip [
 ]
 
 { #category : 'as yet unclassified' }
+Game >> lastTileEffect [
+	^ lastTileEffect
+]
+
+{ #category : 'as yet unclassified' }
 Game >> moveAllShipsExcept: aShip by: anInteger [ 
 	"Usado por MoonWalk: mueve todas las naves excepto la indicada"
 	ships do: [ :each |
@@ -95,17 +110,21 @@ Game >> moveAllShipsExcept: aShip by: anInteger [
 
 { #category : 'as yet unclassified' }
 Game >> moveShip [
-    | roll currentShipObject |
-    self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
-    roll := dice inject: 0 into: [:sum :aDice | sum + aDice roll].
-    currentShipObject := ships at: currentShip.
-    currentShipObject moveForward: roll onBoard: board. 
-	 (board effectAt: currentShipObject position) applyTo: currentShipObject in: self.          
-    (board isWinningPosition: currentShipObject laps ) ifTrue: [
-        winner := currentShipObject.
-        hasEnded := true
-    ].
-    self advanceTurn.
+	| roll currentShipObject anEffect |
+	self hasEnded ifTrue: [ Error signal: 'The Game Is Already Over' ].
+	roll := dice inject: 0 into: [ :sum :aDice | sum + aDice roll ].
+	currentShipObject := ships at: currentShip.
+	activePermanentCards do: [ :assoc |
+			assoc value = currentShipObject ifTrue: [
+				roll := assoc key applyEffectTo: roll for: currentShipObject ] ].
+	currentShipObject moveBy: roll onBoard: board.
+	anEffect := board effectAt: currentShipObject position.
+	anEffect applyTo: currentShipObject in: self.
+	lastTileEffect := anEffect.
+	(board isWinningPosition: currentShipObject laps) ifTrue: [
+			winner := currentShipObject.
+			hasEnded := true ].
+	self advanceTurn
 ]
 
 { #category : 'as yet unclassified' }

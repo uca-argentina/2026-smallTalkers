@@ -83,3 +83,187 @@ CardTest >> test006CardTileGivesOneCardToShip [
 
 
 ]
+
+{ #category : 'tests' }
+CardTest >> test007OverloadCardIsPermanent [
+	| card |
+	card := OverloadCard new.
+	self assert: card isPermanent.
+
+
+
+]
+
+{ #category : 'tests' }
+CardTest >> test008OverloadReducesShipTotalRollByTwo [
+	| aGame aDice aBoard aShip ship1 aCardDeck card |
+	aBoard := Board withTiles: 10.
+	ship1 := Ship new.
+	aShip := OrderedCollection with: ship1.
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 5).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
+
+	card := OverloadCard new.
+	ship1 receiveCard: card.
+
+	card play: ship1 in: aGame target: ship1.
+	aGame moveShip.
+
+	"dado=5, overload resta 2 -> avanza 3"
+	self assert: ship1 position equals: 3.
+
+
+
+]
+
+{ #category : 'tests' }
+CardTest >> test009OverloadCanMakeShipGoBackwardsIfRollIsNegative [
+	| aGame aDice aBoard ship1 ship2 aShips aCardDeck card |
+	aBoard := Board withTiles: 10.
+	ship1 := Ship new.
+	ship2 := Ship new.
+	aShips := OrderedCollection with: ship1 with: ship2.
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 1).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	card := OverloadCard new.
+	ship1 receiveCard: card.
+
+	"Posicionamos ship1 en 3 para poder ver el retroceso"
+	ship1 moveBy: 3 onBoard: aBoard.
+
+	card play: ship1 in: aGame target: ship1.
+	aGame moveShip.
+
+	"dado=1, overload resta 2 -> roll total = -1 -> ship1 retrocede de 3 a 2"
+	self assert: ship1 position equals: 2.
+	"ship2 no fue afectado por overload"
+]
+
+{ #category : 'tests' }
+CardTest >> test010RepeatCardIsNotPermanent [
+	| card |
+	card := RepeatCard new.
+	self deny: card isPermanent.
+]
+
+{ #category : 'tests' }
+CardTest >> test011RepeatAppliesLastTileEffectToChosenShip [
+	| aGame aDice aBoard ship1 aShips aCardDeck card effects |
+	effects := OrderedCollection new.
+	effects add: NullEffect new.   "indice 1 -> posicion 0"
+	effects add: NullEffect new.   "indice 2 -> posicion 1"
+	effects add: SpeedUp new.       "indice 3 -> posicion 2"
+	7 timesRepeat: [ effects add: NullEffect new ].
+
+	aBoard := Board withTiles: 20 laps: 1 effects: effects.
+
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 2).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	card := RepeatCard new.
+	ship1 receiveCard: card.
+
+	"ship1 tira 2 -> cae en posicion 2 (SpeedUp) -> avanza 4 -> queda en posicion 6"
+	aGame moveShip.
+	self assert: ship1 position equals: 6.
+
+	"ship1 juega Repeat eligiendo a ship1 -> se le aplica SpeedUp de nuevo (avanza 4) -> queda en 10"
+	card play: ship1 in: aGame on: ship1.
+	self assert: ship1 position equals: 10.
+]
+
+{ #category : 'tests' }
+CardTest >> test012RepeatHasNoEffectIfLastTileHadNoEffect [
+	| aGame aDice aBoard ship1 aShips aCardDeck card effects |
+	effects := OrderedCollection new.
+	10 timesRepeat: [ effects add: NullEffect new ].
+
+	aBoard := Board withTiles: 20 laps: 1 effects: effects.
+
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 2).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	card := RepeatCard new.
+	ship1 receiveCard: card.
+
+	"ship1 tira 2 -> cae en posicion 2, NullEffect -> sin movimiento extra"
+	aGame moveShip.
+	self assert: ship1 position equals: 2.
+
+	"Repeat sobre NullEffect -> no hace nada"
+	card play: ship1 in: aGame on: ship1.
+	self assert: ship1 position equals: 2.
+]
+
+{ #category : 'tests' }
+CardTest >> test013RepeatHasNoEffectIfNoOneRolledDiceYet [
+	| aGame aDice aBoard ship1 aShips aCardDeck card |
+	aBoard := Board withTiles: 20.
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 2).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	card := RepeatCard new.
+	ship1 receiveCard: card.
+
+	"nadie movio todavia, Repeat no debe hacer nada"
+	card play: ship1 in: aGame on: ship1.
+	self assert: ship1 position equals: 0.
+]
+
+{ #category : 'tests' }
+CardTest >> test014RepeatCannotBePlayedWhenGameHasEnded [
+	| aGame aDice aBoard ship1 aShips aCardDeck card |
+	aBoard := Board withTiles: 1.
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 1).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	card := RepeatCard new.
+	ship1 receiveCard: card.
+
+	"board de 1 tile -> termina el juego"
+	aGame moveShip.
+	self assert: aGame hasEnded.
+
+	self should: [ card play: ship1 in: aGame on: ship1 ]
+		raise: Error
+		withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ].
+]
+
+{ #category : 'tests' }
+CardTest >> test015OverloadCannotBePlayedWhenGameHasEnded [
+	| aGame aDice aBoard ship1 aShips aCardDeck card |
+	aBoard := Board withTiles: 1.
+	ship1 := Ship new.
+	aShips := OrderedCollection with: ship1.
+	aDice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 1).
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard).
+	aGame := Game withBoard: aBoard ships: aShips dice: aDice cardDeck: aCardDeck.
+
+	card := OverloadCard new.
+	ship1 receiveCard: card.
+
+	"board de 1 tile -> termina el juego"
+	aGame moveShip.
+	self assert: aGame hasEnded.
+
+	self should: [ card play: ship1 in: aGame target: ship1 ]
+		raise: Error
+		withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ].
+]
