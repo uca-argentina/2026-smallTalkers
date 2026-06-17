@@ -5,6 +5,11 @@ Class {
 	#package : 'IngSoft2-Model'
 }
 
+{ #category : 'instance creation' }
+CardDeck class >> new [
+	^ super new
+]
+
 { #category : 'drawing' }
 CardDeck >> draw [ 
 	"Returns a random card with uniform distribution among the 6 card types."

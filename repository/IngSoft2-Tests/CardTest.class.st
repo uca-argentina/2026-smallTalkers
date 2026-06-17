@@ -5,6 +5,23 @@ Class {
 	#package : 'IngSoft2-Tests'
 }
 
+{ #category : 'helpers' }
+CardTest >> makeBoardWithTiles: n laps: l [
+	| effects |
+	effects := OrderedCollection new.
+	n timesRepeat: [ effects add: NullEffect new ].
+	^ Board withTiles: n laps: l effects: effects
+]
+
+{ #category : 'helpers' }
+CardTest >> makeGame: shipCount tiles: n laps: l [
+	| ships dice board |
+	board := self makeBoardWithTiles: n laps: l.
+	ships := (1 to: shipCount) collect: [ :i | Ship new ].
+	dice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 3).
+	^ Game withBoard: board ships: ships dice: dice
+]
+
 { #category : 'tests' }
 CardTest >> test001ShipStartsWithEmptyHand [ 
 	| ship |
@@ -350,4 +367,101 @@ CardTest >> test018RedoCannotBePlayedWhenGameHasEnded [
 	self should: [ redo play: ship1 in: aGame target: ship1 ]
 		raise: Error
 		withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ].
+]
+
+{ #category : 'tests' }
+CardTest >> test019SpeedCardIsPermanent [
+	self deny: SpeedCard new isInstant.
+	self assert: SpeedCard new isPermanent.
+]
+
+{ #category : 'tests' }
+CardTest >> test020SpeedCardAddsOneToTargetShipRoll [
+	| game ship1 ship2 card |
+	game := self makeGame: 2 tiles: 20 laps: 3.
+	ship1 := game shipAt: 1.
+	ship2 := game shipAt: 2.
+	card := SpeedCard new.
+	ship1 receiveCard: card.
+	game playCard: card by: ship1 targeting: ship1.
+	self assert: game activePermanentCards size equals: 1.
+	self assert: (game activePermanentCards first rollModifierFor: ship1) equals: 1.
+	self assert: (game activePermanentCards first rollModifierFor: ship2) equals: 0.
+]
+
+{ #category : 'tests' }
+CardTest >> test021SpeedCardCanTargetAnotherShip [
+	| game ship1 ship2 card |
+	game := self makeGame: 2 tiles: 20 laps: 3.
+	ship1 := game shipAt: 1.
+	ship2 := game shipAt: 2.
+	card := SpeedCard new.
+	ship1 receiveCard: card.
+	game playCard: card by: ship1 targeting: ship2.
+	self assert: (game activePermanentCards first rollModifierFor: ship2) equals: 1.
+	self assert: (game activePermanentCards first rollModifierFor: ship1) equals: 0.
+]
+
+{ #category : 'tests' }
+CardTest >> test022AccelerationCardIsPermanent [
+	self assert: AccelerationCard new isPermanent.
+]
+
+{ #category : 'tests' }
+CardTest >> test023AccelerationCardAddsOneToAllShips [
+	| game ship1 ship2 card |
+	game := self makeGame: 2 tiles: 20 laps: 3.
+	ship1 := game shipAt: 1.
+	ship2 := game shipAt: 2.
+	card := AccelerationCard new.
+	ship1 receiveCard: card.
+	game playCard: card by: ship1 targeting: ship1.
+	self assert: (game activePermanentCards first rollModifierFor: ship1) equals: 1.
+	self assert: (game activePermanentCards first rollModifierFor: ship2) equals: 1.
+]
+
+{ #category : 'tests' }
+CardTest >> test024CancellationCardIsInstant [
+	self assert: CancelationCard new isInstant.
+]
+
+{ #category : 'tests' }
+CardTest >> test025CancellationRemovesActivePermanentCard [
+	| game ship1 ship2 speedCard cancelCard |
+	game := self makeGame: 2 tiles: 20 laps: 3.
+	ship1 := game shipAt: 1.
+	ship2 := game shipAt: 2.
+	speedCard := SpeedCard new.
+	ship1 receiveCard: speedCard.
+	game playCard: speedCard by: ship1 targeting: ship1.
+	self assert: game activePermanentCards size equals: 1.
+	cancelCard := CancelationCard new.
+	ship2 receiveCard: cancelCard.
+	game playCard: cancelCard by: ship2 targeting: speedCard.
+	self assert: game activePermanentCards isEmpty.
+]
+
+{ #category : 'tests' }
+CardTest >> test026CancellationWithNoPermanentCardsRaisesError [
+	| game ship card |
+	game := self makeGame: 1 tiles: 20 laps: 3.
+	ship := game shipAt: 1.
+	card := CancelationCard new.
+	ship receiveCard: card.
+	self should: [ game playCard: card by: ship targeting: nil ] raise: Error.
+]
+
+{ #category : 'tests' }
+CardTest >> test027CancellationCanBePlayedOnAnyShipsTurn [
+	| game ship1 ship2 speedCard cancelCard |
+	game := self makeGame: 2 tiles: 20 laps: 3.
+	ship1 := game shipAt: 1.
+	ship2 := game shipAt: 2.
+	speedCard := SpeedCard new.
+	ship1 receiveCard: speedCard.
+	game playCard: speedCard by: ship1 targeting: ship1.
+	cancelCard := CancelationCard new.
+	ship2 receiveCard: cancelCard.
+	game playCard: cancelCard by: ship2 targeting: speedCard.
+	self assert: game activePermanentCards isEmpty.
 ]
