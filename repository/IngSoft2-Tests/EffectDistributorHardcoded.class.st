@@ -43,11 +43,12 @@ EffectDistributorHardcoded >> initializeWithRolls: aRollsCollection steps: aStep
 
 { #category : 'initialization' }
 EffectDistributorHardcoded >> pickEffectForRoll: roll stepsIndex: stepsIndex parsecsIndex: parsecsIndex [ 
-    roll < 0.40 ifTrue: [ ^ NullEffect new ].
-    roll < 0.60 ifTrue: [ ^ Wormhole new ].
-    roll < 0.80 ifTrue: [ ^ SpeedUp new ].
-    roll < 0.90 ifTrue: [ ^ MoonWalk withN: (steps at: stepsIndex) ].
-    roll < 0.98 ifTrue: [ ^ HyperJump withParsecs: (parsecs at: parsecsIndex) ].
+    roll < 0.30 ifTrue: [ ^ NullEffect new ].
+    roll < 0.50 ifTrue: [ ^ Wormhole new ].
+    roll < 0.70 ifTrue: [ ^ SpeedUp new ].
+    roll < 0.80 ifTrue: [ ^ MoonWalk withN: (steps at: stepsIndex) ].
+    roll < 0.88 ifTrue: [ ^ HyperJump withParsecs: (parsecs at: parsecsIndex) ].
+	 roll < 0.98 ifTrue: [ ^ CardTile new ].
     ^ AtomicBomb new
 
 ]

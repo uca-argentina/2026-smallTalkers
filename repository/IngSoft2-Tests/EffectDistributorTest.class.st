@@ -20,7 +20,7 @@ EffectDistributorTest >> test001EffectDistributorGeneratesNullEffect [
 EffectDistributorTest >> test002EffectDistributorGeneratesWormhole [ 
 
     | aRolls anEffects |
-    aRolls := OrderedCollection with: 0.50.
+    aRolls := OrderedCollection with: 0.40.
  	 anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new)generateEffectsFor: 1.
     self assert: ((anEffects at: 1) isKindOf: Wormhole ).
 
@@ -30,7 +30,7 @@ EffectDistributorTest >> test002EffectDistributorGeneratesWormhole [
 EffectDistributorTest >> test003EffectDistributorGeneratesSpeedUp [ 
 
     | aRolls anEffects |
-    aRolls := OrderedCollection with: 0.70.
+    aRolls := OrderedCollection with: 0.60.
    	 anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: OrderedCollection new)generateEffectsFor: 1.
 
     self assert: ((anEffects at: 1) isKindOf: SpeedUp ).
@@ -41,7 +41,7 @@ EffectDistributorTest >> test003EffectDistributorGeneratesSpeedUp [
 EffectDistributorTest >> test004EffectDistributorGeneratesMoonWalk [ 
 
     | aRolls anEffects |
-    aRolls := OrderedCollection with: 0.85.
+    aRolls := OrderedCollection with: 0.75.
 	 anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: (OrderedCollection with: 3) parsecs: OrderedCollection new)generateEffectsFor: 1.
 
     self assert: ((anEffects at: 1) isKindOf: MoonWalk ).
@@ -52,7 +52,7 @@ EffectDistributorTest >> test004EffectDistributorGeneratesMoonWalk [
 EffectDistributorTest >> test005EffectDistributorGeneratesHyperJump [ 
 
     | aRolls anEffects aParsecs |
-    aRolls := OrderedCollection with: 0.95.
+    aRolls := OrderedCollection with: 0.85.
     aParsecs := OrderedCollection with: #(5 2 1).
     anEffects := (EffectDistributorHardcoded withRolls: aRolls steps: OrderedCollection new parsecs: aParsecs) generateEffectsFor: 1.
 
