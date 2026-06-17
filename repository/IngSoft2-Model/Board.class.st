@@ -36,6 +36,22 @@ Board class >> withTiles: aTotalOfTiles laps: aLapCount effects: aCollection [
 	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount effects: aCollection.
 ]
 
+{ #category : 'accessing' }
+Board class >> withTiles: aTotalOfTiles laps: aLapCount effects: aCollection lightyears: aLightyearTotal [
+	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative tiles.' ].
+	aLapCount <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative laps.' ].
+	aLightyearTotal <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative light-years.' ].
+	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount effects: aCollection parsecs: aLightyearTotal / 3.
+]
+
+{ #category : 'accessing' }
+Board class >> withTiles: aTotalOfTiles laps: aLapCount effects: aCollection parsecs: aParsecTotal [
+	aTotalOfTiles <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative tiles.' ].
+	aLapCount <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative laps.' ].
+	aParsecTotal <= 0 ifTrue: [ Error signal: 'Cannot create a board with zero or negative parsecs.' ].
+	^ self new initializeWithTiles: aTotalOfTiles laps: aLapCount effects: aCollection parsecs: aParsecTotal.
+]
+
 { #category : 'initialization' }
 Board >> effectAt: aPosition [
 	effects isEmpty ifTrue: [ ^ NullEffect new ].
@@ -70,12 +86,11 @@ Board >> initializeWithTiles: aTotalOfTiles laps: aLapCount effects: anEffect [
 ]
 
 { #category : 'initialization' }
-Board >> initializeWithTiles: aTotalOfTiles laps: aLapCount effects: anEffect parsecs: aParsecTotal [ [
+Board >> initializeWithTiles: aTotalOfTiles laps: aLapCount effects: anEffect parsecs: aParsecTotal [
 	totalOfTiles := aTotalOfTiles.
 	laps := aLapCount.
 	effects := anEffect.
 	totalParsecs := aParsecTotal.
-]
 ]
 
 { #category : 'initialization' }
@@ -85,10 +100,14 @@ Board >> isWinningPosition: arg1 [
 ]
 
 { #category : 'initialization' }
-Board >> parsecsToTiles: aParsecs [ 
+Board >> lightyearsToTiles: aLightyears [
+	^ self parsecsToTiles: aLightyears / 3
+]
+
+{ #category : 'initialization' }
+Board >> parsecsToTiles: aParsecs [
 	totalParsecs = 0 ifTrue: [ ^ aParsecs ].
 	^ (aParsecs * totalOfTiles / totalParsecs) truncated.
-
 ]
 
 { #category : 'initialization' }

@@ -465,3 +465,40 @@ CardTest >> test027CancellationCanBePlayedOnAnyShipsTurn [
 	game playCard: cancelCard by: ship2 targeting: speedCard.
 	self assert: game activePermanentCards isEmpty.
 ]
+
+{ #category : 'tests' }
+CardTest >> test028BoardCreatedWithLightyearsConvertsCorrectly [
+	| board |
+	board := Board withTiles: 10 laps: 1 effects: OrderedCollection new lightyears: 30.
+	self assert: (board parsecsToTiles: 5) equals: 5.
+]
+
+{ #category : 'tests' }
+CardTest >> test029BoardLightyearsToTilesConverts [
+	| board |
+	board := Board withTiles: 10 laps: 1 effects: OrderedCollection new parsecs: 30.
+	self assert: (board lightyearsToTiles: 30) equals: 3.
+]
+
+{ #category : 'tests' }
+CardTest >> test030GameLightyearsToTilesDelegates [
+	| board game ship dice |
+	board := Board withTiles: 10 laps: 1 effects: OrderedCollection new parsecs: 10.
+	ship := Ship new.
+	dice := OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 3).
+	game := Game withBoard: board ships: (OrderedCollection with: ship) dice: dice.
+	self assert: (game lightyearsToTiles: 3) equals: 1.
+]
+
+{ #category : 'tests' }
+CardTest >> test031HyperJumpWithLightyears [
+	| jump board game ship effects |
+	jump := HyperJump withLightyears: (OrderedCollection with: 6).
+	effects := OrderedCollection new.
+	10 timesRepeat: [ effects add: NullEffect new ].
+	board := Board withTiles: 10 laps: 2 effects: effects parsecs: 10.
+	ship := Ship new.
+	game := Game withBoard: board ships: (OrderedCollection with: ship) dice: (OrderedCollection with: (DiceHardcoded withFaces: 6 andValue: 3)).
+	jump applyTo: ship in: game.
+	self assert: ship position equals: 2.
+]

@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+HyperJump class >> withLightyears: aCollection [
+	aCollection isEmpty ifTrue: [ Error signal: 'Hyperjump needs at least one light-year value' ].
+	^ self new initializeWithParsecs: (aCollection collect: [ :ly | ly / 3 ]).
+]
+
+{ #category : 'as yet unclassified' }
 HyperJump class >> withParsecs: aCollection [
 
 aCollection isEmpty ifTrue: [ Error signal: 'Hyperjump needs at least one parsec value' ].

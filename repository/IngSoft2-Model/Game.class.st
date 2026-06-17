@@ -134,6 +134,11 @@ Game >> lastTileEffect [
 	^ lastTileEffect
 ]
 
+{ #category : 'initialization' }
+Game >> lightyearsToTiles: aLightyears [
+	^ self parsecsToTiles: aLightyears / 3
+]
+
 { #category : 'as yet unclassified' }
 Game >> moveAllShipsExcept: aShip by: anInteger [ 
 	"Usado por MoonWalk: mueve todas las naves excepto la indicada"
@@ -168,9 +173,8 @@ Game >> moveShip: aShip by: anInteger [
 	aShip moveBy: anInteger onBoard: board.
 ]
 
-{ #category : 'as yet unclassified' }
-Game >> parsecsToTiles: aParsecs [ 
-	"Delega la conversión al tablero, que conoce su longitud en parsecs."
+{ #category : 'initialization' }
+Game >> parsecsToTiles: aParsecs [
 	^ board parsecsToTiles: aParsecs
 ]
 
