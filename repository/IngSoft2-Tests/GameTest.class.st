@@ -7,11 +7,12 @@ Class {
 
 { #category : 'tests' }
 GameTest >> test001ifAPlayerReachesFinalPositionTheGameEnds [
-    | aGame aDice aBoard aShip |
+    | aGame aDice aBoard aShip aCardDeck |
     aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 1).
 	 aShip := OrderedCollection with:(Ship new).
 	 aBoard:= Board withTiles: 1.
-    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
     aGame moveShip.
     self assert: aGame hasEnded
 ]
@@ -19,11 +20,12 @@ GameTest >> test001ifAPlayerReachesFinalPositionTheGameEnds [
 { #category : 'tests' }
 GameTest >> test002aPlayerCannotMoveIfTheGameIsAlreadyOver [
 
-   | aGame aDice aBoard aShip |
+   | aGame aDice aBoard aShip aCardDeck |
    aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 1).
 	aBoard:= Board withTiles: 1.
 	aShip := OrderedCollection with:(Ship new).
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    self should: [ aGame moveShip ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ]
 ]
@@ -31,12 +33,13 @@ GameTest >> test002aPlayerCannotMoveIfTheGameIsAlreadyOver [
 { #category : 'tests' }
 GameTest >> test003whenAPlayerExceedsFinalPositionThenTheGameEnds [
 
-   | aGame aDice aBoard aShip |
+   | aGame aDice aBoard aShip aCardDeck |
 
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 15 andValue: 15).
 	aBoard := Board withTiles: 10.
 	aShip := OrderedCollection with:(Ship new).
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    self assert: aGame hasEnded
 
@@ -45,11 +48,12 @@ GameTest >> test003whenAPlayerExceedsFinalPositionThenTheGameEnds [
 { #category : 'tests' }
 GameTest >> test004aPlayerCanKnowItsPosition [
 
-   | aGame aDice aBoard aShip |
+   | aGame aDice aBoard aShip aCardDeck |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 5).
 	aBoard := Board withTiles: 10.
 	aShip := OrderedCollection with:(Ship new).
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    self assert: (aGame ships at: 1) position equals: 5.
 ]
@@ -57,11 +61,12 @@ GameTest >> test004aPlayerCanKnowItsPosition [
 { #category : 'tests' }
 GameTest >> test005TheWinnerIsTheShipThatCrossedTheEnd [
 
-   | aGame aDice aBoard aShip |
+   | aGame aDice aBoard aShip aCardDeck |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
 	aBoard := Board withTiles: 10.
 	aShip := OrderedCollection with:(Ship new).
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    self assert: aGame winner equals: (aGame ships at: 1).
 ]
@@ -69,11 +74,12 @@ GameTest >> test005TheWinnerIsTheShipThatCrossedTheEnd [
 { #category : 'tests' }
 GameTest >> test006WhenTheGameIsNotOverThereIsNoWinner [
 
-   | aGame aDice aBoard aShip |
+   | aGame aDice aBoard aShip aCardDeck |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 6 andValue: 3).
 	aBoard:= Board withTiles: 10.
 	aShip := OrderedCollection with:(Ship new).
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    self assert: aGame winner isNull.
 ]
@@ -81,7 +87,7 @@ GameTest >> test006WhenTheGameIsNotOverThereIsNoWinner [
 { #category : 'tests' }
 GameTest >> test007WhenAShipWinsWithMultipleShipsTheGameEnds [
 
-   | aGame aDice aBoard aShip aShip1 aShip2 |
+   | aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
 	aBoard:= Board withTiles: 10.
 	aShip := OrderedCollection new.
@@ -89,7 +95,8 @@ GameTest >> test007WhenAShipWinsWithMultipleShipsTheGameEnds [
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    self assert: aGame hasEnded.
 ]
@@ -97,7 +104,7 @@ GameTest >> test007WhenAShipWinsWithMultipleShipsTheGameEnds [
 { #category : 'tests' }
 GameTest >> test008TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
 
-   | aGame aDice aBoard aShip aShip1 aShip2 |
+   | aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 9).
 	aBoard:= Board withTiles: 10.
 	aShip := OrderedCollection new.
@@ -105,7 +112,8 @@ GameTest >> test008TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    aGame moveShip.
    aGame moveShip.
@@ -115,7 +123,7 @@ GameTest >> test008TheWinnerIsTheShipThatCrossedTheEndWithMultipleShips [
 { #category : 'tests' }
 GameTest >> test009AShipCannotMoveAfterAnotherShipWon [
 
-    | aGame aDice aBoard aShip aShip1 aShip2 |
+    | aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
 	 aDice := OrderedCollection with:(DiceHardcoded withFaces: 10 andValue: 10).
 	 aBoard:= Board withTiles: 10.
 	 aShip := OrderedCollection new.
@@ -123,7 +131,8 @@ GameTest >> test009AShipCannotMoveAfterAnotherShipWon [
 	 aShip2 := Ship new.
 	 aShip add: aShip1.
 	 aShip add: aShip2.
-    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
     aGame moveShip.
     self should: [ aGame moveShip ] raise: Error withExceptionDo: [ :error | self assert: error messageText equals: 'The Game Is Already Over' ].
 ]
@@ -131,7 +140,7 @@ GameTest >> test009AShipCannotMoveAfterAnotherShipWon [
 { #category : 'tests' }
 GameTest >> test010CanKnowThePositionOfEachShipWithMultipleShips [
 
-   | aGame aDice aBoard aShip aShip1 aShip2 |
+   | aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
 	aDice := OrderedCollection with:(DiceHardcoded withFaces: 7 andValue: 3).
 	aBoard:= Board withTiles: 10.
 	aShip := OrderedCollection new.
@@ -139,7 +148,8 @@ GameTest >> test010CanKnowThePositionOfEachShipWithMultipleShips [
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
    aGame moveShip.
    aGame moveShip.
    aGame moveShip.
@@ -150,7 +160,7 @@ GameTest >> test010CanKnowThePositionOfEachShipWithMultipleShips [
 { #category : 'tests' }
 GameTest >> test011TurnsRotateBetweenShips [
 
-	| aGame aDice aBoard aShip aShip1 aShip2 |
+	| aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
 	aDice := OrderedCollection with:
 		         (DiceHardcoded withFaces: 6 andValue: 3).
 	aBoard := Board withTiles: 10.
@@ -159,7 +169,8 @@ GameTest >> test011TurnsRotateBetweenShips [
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
 	aGame moveShip.
 	aGame moveShip.
 	self assert: aGame ships first position equals: 3.
@@ -169,7 +180,7 @@ GameTest >> test011TurnsRotateBetweenShips [
 { #category : 'tests' }
 GameTest >> test012TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 
-	| aGame aDice aBoard aShip aShip1 aShip2 |
+	| aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
 	aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 10).
 	aBoard := Board withTiles: 10.
 	aShip := OrderedCollection new.
@@ -177,7 +188,8 @@ GameTest >> test012TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
 	aGame moveShip.
    self assert: aGame winner equals: (aGame ships at: 1).
 ]
@@ -185,7 +197,7 @@ GameTest >> test012TheWinnerIsTheShipWhoseTurnItWasWhenTheGameEnded [
 { #category : 'tests' }
 GameTest >> test013ShipMovesTheSumOfAllDiceRolls [
 
-	| aGame aDice aDice1 aDice2 aBoard aShip aShip1 aShip2 |
+	| aGame aDice aDice1 aDice2 aBoard aShip aShip1 aShip2 aCardDeck |
 	aDice := OrderedCollection new.
 	aDice1 := DiceHardcoded withFaces: 9 andValue: 9.
 	aDice2 := DiceHardcoded withFaces: 6 andValue: 6.
@@ -197,7 +209,8 @@ GameTest >> test013ShipMovesTheSumOfAllDiceRolls [
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-	aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+	aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
 	aGame moveShip.
 	self assert: (aGame ships at: 1) position equals: 15.
 ]
@@ -216,7 +229,7 @@ GameTest >> test014CannotCreateAGameWithEmptyDiceCollection [
 { #category : 'tests' }
 GameTest >> test015TheGameKnowsWhenItsOverWithLaps [
 
-	| aGame aDice aDice2 aBoard aShip aShip1 aShip2 |
+	| aGame aDice aDice2 aBoard aShip aShip1 aShip2 aCardDeck |
 	aDice:= OrderedCollection new.
 	aDice2 := DiceHardcoded withFaces: 10 andValue: 10.
 	aDice add: aDice2.
@@ -226,7 +239,8 @@ GameTest >> test015TheGameKnowsWhenItsOverWithLaps [
 	aShip2 := Ship new.
 	aShip add: aShip1.
 	aShip add: aShip2.
-   aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
 	aGame moveShip.
 	aGame moveShip.
 	aGame moveShip.
@@ -235,7 +249,7 @@ GameTest >> test015TheGameKnowsWhenItsOverWithLaps [
 
 { #category : 'tests' }
 GameTest >> test016RankingOfShipWithMoreLapsIsFirst [
-    | aGame aDice aBoard aShip aShip1 aShip2 |
+    | aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 10).
     aBoard := Board withTiles: 10 laps: 3.
     aShip := OrderedCollection new.
@@ -243,7 +257,8 @@ GameTest >> test016RankingOfShipWithMoreLapsIsFirst [
     aShip2 := Ship new.
     aShip add: aShip1.
     aShip add: aShip2.
-    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
     aGame moveShip.
     aGame moveShip.
     aGame moveShip.
@@ -253,7 +268,7 @@ GameTest >> test016RankingOfShipWithMoreLapsIsFirst [
 
 { #category : 'tests' }
 GameTest >> test017RankingOfShipWithHigherPositionIsFirst [
-    | aGame aDice aDice1 aDice2 aBoard aShip aShip1 aShip2 |
+    | aGame aDice aDice1 aBoard aShip aShip1 aShip2 aCardDeck |
     aDice := OrderedCollection new.
     aDice1 := DiceHardcoded withFaces: 10 andValue: 7.
     aDice add: aDice1.
@@ -263,7 +278,8 @@ GameTest >> test017RankingOfShipWithHigherPositionIsFirst [
     aShip2 := Ship new.
     aShip add: aShip1.
     aShip add: aShip2.
-    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
     aGame moveShip.
     self assert: (aGame rankingOf: aShip1) equals: 1.
     self assert: (aGame rankingOf: aShip2) equals: 2.
@@ -271,7 +287,7 @@ GameTest >> test017RankingOfShipWithHigherPositionIsFirst [
 
 { #category : 'tests' }
 GameTest >> test018RankingOfShipsWithSamePositionAndLapsAreEqual [
-    | aGame aDice aBoard aShip aShip1 aShip2 |
+    | aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 5).
     aBoard := Board withTiles: 10 laps: 3.
     aShip := OrderedCollection new.
@@ -279,7 +295,8 @@ GameTest >> test018RankingOfShipsWithSamePositionAndLapsAreEqual [
     aShip2 := Ship new.
     aShip add: aShip1.
     aShip add: aShip2.
-    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
     aGame moveShip.
     aGame moveShip.
     aGame moveShip.
@@ -289,20 +306,21 @@ GameTest >> test018RankingOfShipsWithSamePositionAndLapsAreEqual [
 
 { #category : 'tests' }
 GameTest >> test019TheGameKnowsTheCurrentLapOfAShip [
-    | aGame aDice aBoard aShip aShip1 |
+    | aGame aDice aBoard aShip aShip1 aCardDeck |
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 10).
     aBoard := Board withTiles: 10 laps: 3.
     aShip := OrderedCollection new.
     aShip1 := Ship new.
     aShip add: aShip1.
-    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+   aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
     aGame moveShip.
     self assert: (aGame lapsOf: aShip1) equals: 1.
 ]
 
 { #category : 'tests' }
 GameTest >> test020TheGameKnowsMultipleShipsCurrentLap [
-    | aGame aDice aBoard aShip aShip1 aShip2 |
+    | aGame aDice aBoard aShip aShip1 aShip2 aCardDeck |
     aDice := OrderedCollection with: (DiceHardcoded withFaces: 10 andValue: 10).
     aBoard := Board withTiles: 10 laps: 3.
     aShip := OrderedCollection new.
@@ -310,7 +328,8 @@ GameTest >> test020TheGameKnowsMultipleShipsCurrentLap [
     aShip2 := Ship new.
     aShip add: aShip1.
     aShip add: aShip2.
-    aGame := Game withBoard: aBoard ships: aShip dice: aDice.
+    aCardDeck := CardDeckHardcoded withCards: (OrderedCollection with: NullCard with: NullCard with: NullCard ).
+    aGame := Game withBoard: aBoard ships: aShip dice: aDice cardDeck: aCardDeck.
     aGame moveShip.
 	 aGame moveShip.
 	 aGame moveShip.

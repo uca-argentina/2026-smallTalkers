@@ -1,14 +1,14 @@
 Class {
-	#name : 'NullEffect',
+	#name : 'CardTile',
 	#superclass : 'TileEffect',
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'as yet unclassified' }
-NullEffect >> applyTo: aShip in: aGame [
+CardTile >> applyTo: aShip in: aGame [
 
-
+aShip receiveCard: aGame drawCard.
 
 
 ]

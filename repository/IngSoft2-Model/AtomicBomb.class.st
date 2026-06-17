@@ -7,8 +7,7 @@ Class {
 
 { #category : 'as yet unclassified' }
 AtomicBomb >> applyTo: aShip in: aGame [
-
-aGame ships do: [ :i | i resetPosition ]
+	aGame resetAllShips
 
 
 ]
